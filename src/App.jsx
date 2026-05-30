@@ -849,7 +849,7 @@ export default function App() {
             className="absolute left-1/2 transform -translate-x-1/2 flex items-center cursor-pointer h-12"
           >
             <img 
-              src="/logo.svg" 
+              src={`${import.meta.env.BASE_URL}logo.svg`} 
               alt="Dubai Incorporação e Construção" 
               className="h-9 md:h-11 w-auto" 
             />
@@ -1057,7 +1057,7 @@ export default function App() {
                   }}
                 >
                   <img 
-                    src="/hero-bg.png" 
+                    src={`${import.meta.env.BASE_URL}hero-bg.png`} 
                     alt="Fachada Construtora Dubai de Luxo" 
                     className="w-full h-full object-cover"
                   />
@@ -1078,7 +1078,7 @@ export default function App() {
                   }}
                 >
                   <video 
-                    src="/hero-video.mp4" 
+                    src={`${import.meta.env.BASE_URL}hero-video.mp4`} 
                     autoPlay 
                     loop 
                     muted 
@@ -2369,7 +2369,7 @@ export default function App() {
                       {/* The Floor Plan Image Panel with Premium 3D Tilt Effect on Hover */}
                       <InteractiveTiltCard className="w-full h-full flex items-center justify-center py-8 relative group/canvas bg-white border-0 shadow-none cursor-pointer">
                         <img
-                          src="/22.png"
+                          src={`${import.meta.env.BASE_URL}22.png`}
                           alt={`Planta ${activeAreaTab}`}
                           className="max-h-[320px] w-auto object-contain transition-all duration-500 ease-out group-hover/canvas:scale-102"
                         />
@@ -2515,7 +2515,7 @@ export default function App() {
                           }
                         }
                       }}
-                      src="/333.mp4"
+                      src={`${import.meta.env.BASE_URL}333.mp4`}
                       playsInline
                       loop
                       controls={isVideoPlaying}
@@ -3322,7 +3322,7 @@ export default function App() {
           {/* Coluna Esquerda (Logo, Slogan, Redes Sociais, Contato) */}
           <div className="lg:col-span-7 flex flex-col items-start gap-5">
             <img 
-              src="/logo.svg" 
+              src={`${import.meta.env.BASE_URL}logo.svg`} 
               alt="Dubai Incorporação e Construção" 
               className="h-10 w-auto cursor-pointer mb-2" 
               onClick={() => {
