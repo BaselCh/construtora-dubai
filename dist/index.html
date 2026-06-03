@@ -5,6 +5,9 @@
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Dubai Incorporação e Construção. Apartamentos de altíssimo padrão em Osasco e Barueri. Qualidade construtiva inquestionável e 100% das obras entregues no prazo." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Dubai Incorporação e Construção | Alto Padrão em Osasco e Barueri</title>
     
     <!-- Tailwind CSS Play CDN para renderização instantânea do Grid e Layout -->
@@ -13,21 +16,51 @@
       tailwind.config = {
         theme: {
           extend: {
+            fontFamily: {
+              sora: ["Sora", "sans-serif"]
+            },
             colors: {
               red: {
                 800: '#951b1e',   // Pantone 484 C
                 900: '#af1e23',   // Pantone 1805 C
                 950: '#0d0d0e',   // Charcoal Background
+              },
+              'nav-button': 'hsl(0, 0%, 18%)',
+              'hero-bg': 'hsl(0, 0%, 8%)',
+            },
+            animation: {
+              'fade-up': 'fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in': 'fade-in 0.5s ease-out forwards',
+            },
+            keyframes: {
+              'fade-up': {
+                '0%': { opacity: '0', transform: 'translateY(20px)', filter: 'blur(4px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)', filter: 'blur(0)' }
+              },
+              'fade-in': {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' }
               }
             }
           }
         }
       }
     </script>
-    <script type="module" crossorigin src="./assets/index-lcHLwOrC.js"></script>
+    <script type="module" crossorigin src="./assets/index-BLkJ5sj2.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-DzmuPY3d.css">
   </head>
   <body>
+    <!-- SVG Green-to-Red Color Matrix Filter -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <filter id="green-to-red">
+        <feColorMatrix type="matrix" values="
+          1 1 -1 0 0
+          1 0 0 0 0
+          0 0 1 0 0
+          0 0 0 1 0
+        "/>
+      </filter>
+    </svg>
     <div id="root"></div>
   </body>
 </html>

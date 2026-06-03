@@ -27,6 +27,154 @@ import {
   Play
 } from 'lucide-react';
 
+function CanvasHexagonGrid() {
+  const canvasRef = React.useRef(null);
+  const mouseRef = React.useRef({ x: -1000, y: -1000, active: false });
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const handleMouseMove = (e) => {
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
+      mouseRef.current.active = true;
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current.active = false;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+
+    let time = 0;
+    const drawGrid = () => {
+      time += 0.005;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#080809'; // bg-deep
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const size = 35;
+      const hSpacing = size * 1.732;
+      const vSpacing = size * 1.5;
+      const cols = Math.ceil(canvas.width / hSpacing) + 2;
+      const rows = Math.ceil(canvas.height / vSpacing) + 2;
+
+      // Pulse spotlight coordinate if mouse not active
+      let spotX = mouseRef.current.x;
+      let spotY = mouseRef.current.y;
+      if (!mouseRef.current.active) {
+        spotX = canvas.width / 2 + Math.sin(time * 2) * (canvas.width * 0.25);
+        spotY = canvas.height / 2 + Math.cos(time * 1.5) * (canvas.height * 0.2);
+      }
+
+      for (let r = -1; r < rows; r++) {
+        const offset = (r % 2) * (hSpacing / 2);
+        for (let c = -1; c < cols; c++) {
+          const centerX = c * hSpacing + offset;
+          const centerY = r * vSpacing;
+
+          // Calculate distance to spotlight
+          const dx = centerX - spotX;
+          const dy = centerY - spotY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          // Interactive height offset (3D extrusion wave)
+          const wave = Math.sin(time * 3 + (centerX * 0.003) + (centerY * 0.003)) * 4;
+          const distFactor = Math.max(0, 1 - dist / 350);
+          const extrude = wave + distFactor * 12; // Extrude up to 12px based on mouse proximity
+
+          const drawX = centerX;
+          const drawY = centerY - extrude;
+
+          // Spotlight intensity
+          const glowIntensity = distFactor; // 0 to 1
+
+          // Draw the 3D Cube
+          drawCube(ctx, drawX, drawY, size, glowIntensity);
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(drawGrid);
+    };
+
+    const drawCube = (ctx, x, y, r, glow) => {
+      const cx = 0.866 * r; // cos(30) * r
+      const sy = 0.5 * r;  // sin(30) * r
+
+      // Base grays for 3D faces (blended with brand red #d81d00)
+      const r_val = Math.round(18 + glow * 198); 
+      const g_val = Math.round(18 + glow * 11);  
+      const b_val = Math.round(20 + glow * 0);   
+
+      // 3 different faces (top, left, right) with lighting multipliers
+      const topFill = `rgb(${Math.min(255, Math.round(r_val * 1.25))}, ${Math.min(255, Math.round(g_val * 1.25))}, ${Math.min(255, Math.round(b_val * 1.25))})`;
+      const leftFill = `rgb(${Math.round(r_val * 0.75)}, ${Math.round(g_val * 0.75)}, ${Math.round(b_val * 0.75)})`;
+      const rightFill = `rgb(${Math.round(r_val * 0.95)}, ${Math.round(g_val * 0.95)}, ${Math.round(b_val * 0.95)})`;
+      
+      // Outline stroke color (glowing red outline based on mouse distance)
+      ctx.strokeStyle = glow > 0.05 ? `rgba(216, 29, 0, ${0.05 + glow * 0.35})` : 'rgba(255, 255, 255, 0.02)';
+      ctx.lineWidth = 0.8;
+
+      // 1. Top face
+      ctx.fillStyle = topFill;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - cx, y - sy);
+      ctx.lineTo(x, y - r);
+      ctx.lineTo(x + cx, y - sy);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // 2. Left face
+      ctx.fillStyle = leftFill;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - cx, y - sy);
+      ctx.lineTo(x - cx, y + sy);
+      ctx.lineTo(x, y + r);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // 3. Right face
+      ctx.fillStyle = rightFill;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x, y + r);
+      ctx.lineTo(x + cx, y + sy);
+      ctx.lineTo(x + cx, y - sy);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    };
+
+    drawGrid();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />;
+}
+
+const Spline = React.lazy(() => import('@splinetool/react-spline'));
+
 // Dados dos Empreendimentos Oficiais da Dubai
 const empreendimentosData = [
   {
@@ -495,6 +643,8 @@ export default function App() {
       const hash = window.location.hash;
       if (!hash || hash === '#home') {
         setCurrentPage('home');
+      } else if (hash === '#home2') {
+        setCurrentPage('home2');
       } else if (hash === '#empreendimentos') {
         setCurrentPage('empreendimentos');
       } else if (hash === '#contato') {
@@ -529,6 +679,9 @@ export default function App() {
     if (currentPage === 'home') {
       targetHash = 'home';
       title = 'Dubai Construtora | Incorporadora de Luxo e Alto Padrão';
+    } else if (currentPage === 'home2') {
+      targetHash = 'home2';
+      title = 'Dubai Construtora | Teste Hero 3D';
     } else if (currentPage === 'empreendimentos') {
       targetHash = 'empreendimentos';
       title = 'Nossos Empreendimentos | Dubai Construtora';
@@ -764,7 +917,7 @@ export default function App() {
       {/* ========================================================================= */}
       {/* HEADER GLOBAL - Layout Centralizado & Menu Dinâmico do Wireframe */}
       {/* ========================================================================= */}
-      <header className="fixed top-0 left-0 w-full z-50 glass-panel border-b border-zinc-950/80 transition-all duration-300">
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrollY > 20 ? 'glass-panel border-b border-zinc-950/80 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
           {/* Lado Esquerdo: Menu hambúrguer interativo + Links horizontais no estado Aberto */}
@@ -814,6 +967,7 @@ export default function App() {
                   >
                     Home
                   </button>
+
                   <button 
                     onClick={() => { setCurrentPage('empreendimentos'); setIsMenuOpen(false); }}
                     className={`text-sm font-bold tracking-wide transition-colors ${currentPage === 'empreendimentos' ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}`}
@@ -886,6 +1040,7 @@ export default function App() {
               >
                 Home
               </button>
+
               <button 
                 onClick={() => { setCurrentPage('empreendimentos'); setIsMenuOpen(false); }}
                 className={`text-2xl font-bold uppercase tracking-wider text-left transition-colors ${currentPage === 'empreendimentos' ? 'text-red-500' : 'text-white hover:text-red-500'}`}
@@ -1028,7 +1183,7 @@ export default function App() {
       )}
 
       {/* Espaçador de Cabeçalho */}
-      <div className="h-20"></div>
+      {currentPage !== 'home' && currentPage !== 'home2' && <div className="h-20"></div>}
 
       {/* ========================================================================= */}
       {/* CONTEÚDO PRINCIPAL - Sistema de Rotas */}
@@ -1038,130 +1193,250 @@ export default function App() {
         {/* ------------------------------------------------------------------------- */}
         {/* PÁGINA 1: HOME PAGE */}
         {/* ------------------------------------------------------------------------- */}
-        {currentPage === 'home' && (
+        {(currentPage === 'home' || currentPage === 'home2') && (
           <div className="animate-fade-in-up">
             
-            {/* 1. HERO SECTION - LUXO PARALLAX E SLIDER (IMAGEM E VÍDEO) */}
-            <section className="relative h-screen overflow-hidden bg-transparent flex items-center justify-center">
-              
-              {/* ---------------- SLIDE 1: IMAGEM DE LUXO ---------------- */}
-              <div 
-                className={`absolute inset-0 z-0 transition-opacity duration-[1200ms] ease-in-out ${activeHeroSlide === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-              >
+            {currentPage === 'home' ? (
+              /* 1. HERO SECTION - LUXO PARALLAX E SLIDER (IMAGEM E VÍDEO) */
+              <section className="relative h-screen overflow-hidden bg-transparent flex items-center justify-center">
+                
+                {/* ---------------- SLIDE 1: IMAGEM DE LUXO ---------------- */}
                 <div 
-                  className="absolute inset-0"
-                  style={{
-                    transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
-                    opacity: heroOpacity * 0.45 + 0.25,
-                    transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1)'
-                  }}
+                  className={`absolute inset-0 z-0 transition-opacity duration-[1200ms] ease-in-out ${activeHeroSlide === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                 >
-                  <img 
-                    src={`${import.meta.env.BASE_URL}hero-bg.png`} 
-                    alt="Fachada Construtora Dubai de Luxo" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black"></div>
-                </div>
-              </div>
-
-              {/* ---------------- SLIDE 2: VÍDEO MP4 CINEMATOGRÁFICO ---------------- */}
-              <div 
-                className={`absolute inset-0 z-0 transition-opacity duration-[1200ms] ease-in-out ${activeHeroSlide === 1 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-              >
-                <div 
-                  className="absolute inset-0"
-                  style={{
-                    transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
-                    opacity: heroOpacity * 0.5 + 0.3,
-                    transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1)'
-                  }}
-                >
-                  <video 
-                    src={`${import.meta.env.BASE_URL}hero-video.mp4`} 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black"></div>
-                </div>
-              </div>
-
-              {/* ---------------- TEXTO SLIDE 1 ---------------- */}
-              <div 
-                className={`absolute inset-0 z-10 flex items-center justify-center px-6 transition-all duration-[1000ms] ease-in-out ${activeHeroSlide === 0 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}`}
-              >
-                <div 
-                  className="max-w-4xl mx-auto text-center flex flex-col gap-6"
-                  style={{
-                    transform: `translateY(${-heroTranslateY * 0.05}px)`,
-                    opacity: heroOpacity,
-                    transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.1s linear'
-                  }}
-                >
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-red-800/40 w-fit mx-auto animate-pulse">
-                    <Sparkles size={14} className="text-red-500" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
-                      Quem compara compra Dubai • Obras Entregues no Prazo
-                    </span>
+                  <div 
+                    className="absolute inset-0"
+                    style={{
+                      transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+                      opacity: heroOpacity * 0.45 + 0.25,
+                      transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    }}
+                  >
+                    <img 
+                      src={`${import.meta.env.BASE_URL}hero-bg.png`} 
+                      alt="Fachada Construtora Dubai de Luxo" 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black"></div>
                   </div>
+                </div>
+
+                {/* ---------------- SLIDE 2: VÍDEO MP4 CINEMATOGRÁFICO ---------------- */}
+                <div 
+                  className={`absolute inset-0 z-0 transition-opacity duration-[1200ms] ease-in-out ${activeHeroSlide === 1 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                >
+                  <div 
+                    className="absolute inset-0"
+                    style={{
+                      transform: `scale(${heroScale}) translateY(${heroTranslateY}px)`,
+                      opacity: heroOpacity * 0.5 + 0.3,
+                      transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    }}
+                  >
+                    <video 
+                      src={`${import.meta.env.BASE_URL}hero-video.mp4`} 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black"></div>
+                  </div>
+                </div>
+
+                {/* ---------------- TEXTO SLIDE 1 ---------------- */}
+                <div 
+                  className={`absolute inset-0 z-10 flex items-center justify-center px-6 transition-all duration-[1000ms] ease-in-out ${activeHeroSlide === 0 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}`}
+                >
+                  <div 
+                    className="max-w-4xl mx-auto text-center flex flex-col gap-6"
+                    style={{
+                      transform: `translateY(${-heroTranslateY * 0.05}px)`,
+                      opacity: heroOpacity,
+                      transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.1s linear'
+                    }}
+                  >
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-red-800/40 w-fit mx-auto animate-pulse">
+                      <Sparkles size={14} className="text-red-500" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
+                        Quem compara compra Dubai • Obras Entregues no Prazo
+                      </span>
+                    </div>
+                    
+                    <h1 className="text-[26px] sm:text-4xl md:text-6xl text-white uppercase font-extrabold leading-tight tracking-wider font-sans px-2">
+                      Empreendimentos que elevam <br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-400">
+                        sua experiência de viver
+                      </span>
+                    </h1>
+
+                    <p className="text-base md:text-lg text-zinc-300 max-w-2xl mx-auto font-light leading-relaxed">
+                      Projetos contemporâneos em localizações estratégicas de Osasco, Alphaville e região.
+                    </p>
+
+                    <div className="flex flex-wrap justify-center gap-4 mt-6">
+                      <button 
+                        onClick={() => setCurrentPage('empreendimentos')}
+                        className="btn-primary flex items-center gap-2"
+                      >
+                        <span>Conhecer empreendimentos</span>
+                        <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ---------------- TEXTO SLIDE 2 ---------------- */}
+                <div 
+                  className={`absolute inset-0 z-10 flex items-center justify-center px-6 transition-all duration-[1000ms] ease-in-out ${activeHeroSlide === 1 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}`}
+                >
+                  <div 
+                    className="max-w-4xl mx-auto text-center flex flex-col gap-6"
+                    style={{
+                      transform: `translateY(${-heroTranslateY * 0.05}px)`,
+                      opacity: heroOpacity,
+                      transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.1s linear'
+                    }}
+                  >
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-red-800/40 w-fit mx-auto animate-pulse">
+                      <Sparkles size={14} className="text-red-500" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
+                        DNA Dubai • Solidez, Segurança e Alto Padrão
+                      </span>
+                    </div>
+                    
+                    <h1 className="text-[26px] sm:text-4xl md:text-6xl text-white uppercase font-extrabold leading-tight tracking-wider font-sans px-2">
+                      A grife do alto padrão <br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-400">
+                        na grande São Paulo
+                      </span>
+                    </h1>
+
+                    <p className="text-base md:text-lg text-zinc-300 max-w-2xl mx-auto font-light leading-relaxed">
+                      Acabamento nobre superior, engenharia de ponta e valorização imobiliária certificada por contrato.
+                    </p>
+
+                    <div className="flex flex-wrap justify-center gap-4 mt-6">
+                      <button 
+                        onClick={() => {
+                          setCurrentPage('contato');
+                          setTimeout(() => {
+                            document.getElementById('lead-form-box')?.scrollIntoView({ behavior: 'smooth' });
+                          }, 100);
+                        }}
+                        className="btn-primary flex items-center gap-2"
+                      >
+                        <span>Falar com especialista</span>
+                        <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Setas de navegação exclusivas do Slider (Estilo Dubai Luxury) - Alinhadas no Grid Centralizado do Site, ocultas em mobile */}
+                <div className="hidden md:flex absolute inset-x-0 top-1/2 -translate-y-1/2 w-full max-w-7xl mx-auto px-6 z-30 justify-between pointer-events-none">
+                  <button 
+                    onClick={() => setActiveHeroSlide((prev) => (prev === 0 ? 1 : 0))}
+                    className="w-12 h-12 rounded-full border border-zinc-800 bg-black/40 text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 flex items-center justify-center transition-all duration-300 group shadow-2xl backdrop-blur-md pointer-events-auto"
+                    aria-label="Slide anterior"
+                  >
+                    <ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
+                  </button>
+                  <button 
+                    onClick={() => setActiveHeroSlide((prev) => (prev === 0 ? 1 : 0))}
+                    className="w-12 h-12 rounded-full border border-zinc-800 bg-black/40 text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 flex items-center justify-center transition-all duration-300 group shadow-2xl backdrop-blur-md pointer-events-auto"
+                    aria-label="Próximo slide"
+                  >
+                    <ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
+
+                {/* Controles de navegação dos slides (Pontos/Dots inferiores de luxo) - Elevados para evitar sobreposição */}
+                <div className="absolute bottom-52 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+                  <button 
+                    onClick={() => setActiveHeroSlide(0)}
+                    className={`w-3.5 h-1 rounded-full transition-all duration-300 ${activeHeroSlide === 0 ? 'bg-[#d81d00] w-7' : 'bg-zinc-700 hover:bg-zinc-500'}`}
+                    aria-label="Slide 1"
+                  />
+                  <button 
+                    onClick={() => setActiveHeroSlide(1)}
+                    className={`w-3.5 h-1 rounded-full transition-all duration-300 ${activeHeroSlide === 1 ? 'bg-[#d81d00] w-7' : 'bg-zinc-700 hover:bg-zinc-500'}`}
+                    aria-label="Slide 2"
+                  />
+                </div>
+
+                {/* Icone animada de Scroll - Posicionada na base para separação geométrica perfeita (Sem texto Scroll) */}
+                <div 
+                  className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer opacity-75 hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    const nextSection = document.querySelector('section.py-24');
+                    nextSection?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <div className="w-5 h-9 border border-zinc-700 rounded-full flex justify-center p-1">
+                    <div className="w-1.5 h-2 bg-[#d81d00] rounded-full animate-bounce"></div>
+                  </div>
+                </div>
+              </section>
+            ) : (
+              /* 1. HERO SECTION - SPLINE 3D HERO (DUBAI CONSTRUTORA BRAND THEME) */
+              <section className="relative min-h-screen flex items-center justify-center bg-[#080809] overflow-hidden font-sora">
+                {/* Spline 3D Background (absolute, full-size) with color matrix filter shifting green to red */}
+                <div className="absolute inset-0 z-0">
+                  <React.Suspense fallback={<div className="absolute inset-0 bg-[#080809] animate-pulse" />}>
+                    <Spline 
+                      scene="https://prod.spline.design/Slk6b8kz3LRlKiyk/scene.splinecode" 
+                      className="w-full h-full" 
+                      style={{ filter: 'url(#green-to-red)' }}
+                    />
+                  </React.Suspense>
                   
-                  <h1 className="text-[26px] sm:text-4xl md:text-6xl text-white uppercase font-extrabold leading-tight tracking-wider font-sans px-2">
-                    Empreendimentos que elevam <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-400">
-                      sua experiência de viver
-                    </span>
+                  {/* Seamless blending gradients: top fades to header, bottom fades to next section */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#080809] via-transparent to-[#080809] z-[1] pointer-events-none opacity-85" />
+                </div>
+                
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-black/25 z-[1] pointer-events-none" />
+                
+                {/* Content container - centered and aligned with header container boundaries (max-w-7xl mx-auto px-6) */}
+                <div className="relative z-10 pointer-events-none w-full max-w-7xl mx-auto px-6 md:px-12 pt-20 flex flex-col items-center text-center">
+                  {/* Heading */}
+                  <h1 
+                    className="text-[clamp(3rem,8vw,6.5rem)] font-bold leading-[1.05] tracking-[-0.05em] text-white mb-3 md:mb-5 uppercase opacity-0 animate-fade-up"
+                    style={{ animationDelay: "0.2s" }}
+                  >
+                    DUBAI <span className="text-[#d81d00]">CONSTRUTORA</span>
                   </h1>
 
-                  <p className="text-base md:text-lg text-zinc-300 max-w-2xl mx-auto font-light leading-relaxed">
-                    Projetos contemporâneos em localizações estratégicas de Osasco, Alphaville e região.
+                  {/* Subheading */}
+                  <p 
+                    className="text-white/80 text-[clamp(1.125rem,2.5vw,2rem)] font-light mb-4 md:mb-6 opacity-0 animate-fade-up"
+                    style={{ animationDelay: "0.4s" }}
+                  >
+                    Quem compara compra Dubai.
                   </p>
 
-                  <div className="flex flex-wrap justify-center gap-4 mt-6">
+                  {/* Description */}
+                  <p 
+                    className="text-zinc-400 text-[clamp(0.875rem,1.5vw,1.25rem)] font-light mb-6 md:mb-8 opacity-0 animate-fade-up max-w-2xl leading-relaxed"
+                    style={{ animationDelay: "0.55s" }}
+                  >
+                    Apartamentos de altíssimo padrão em Osasco e Barueri. Qualidade construtiva inquestionável e 100% das obras entregues no prazo. O padrão de luxo que sua família merece.
+                  </p>
+
+                  {/* Two CTA buttons */}
+                  <div 
+                    className="flex flex-wrap justify-center gap-4 font-bold opacity-0 animate-fade-up"
+                    style={{ animationDelay: "0.7s" }}
+                  >
                     <button 
                       onClick={() => setCurrentPage('empreendimentos')}
-                      className="btn-primary flex items-center gap-2"
+                      className="btn-primary px-8 py-4 pointer-events-auto uppercase tracking-wider flex items-center gap-2"
                     >
-                      <span>Conhecer empreendimentos</span>
+                      <span>Ver Empreendimentos</span>
                       <ArrowRight size={16} />
                     </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* ---------------- TEXTO SLIDE 2 ---------------- */}
-              <div 
-                className={`absolute inset-0 z-10 flex items-center justify-center px-6 transition-all duration-[1000ms] ease-in-out ${activeHeroSlide === 1 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}`}
-              >
-                <div 
-                  className="max-w-4xl mx-auto text-center flex flex-col gap-6"
-                  style={{
-                    transform: `translateY(${-heroTranslateY * 0.05}px)`,
-                    opacity: heroOpacity,
-                    transition: 'transform 0.1s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.1s linear'
-                  }}
-                >
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-red-800/40 w-fit mx-auto animate-pulse">
-                    <Sparkles size={14} className="text-red-500" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
-                      DNA Dubai • Solidez, Segurança e Alto Padrão
-                    </span>
-                  </div>
-                  
-                  <h1 className="text-[26px] sm:text-4xl md:text-6xl text-white uppercase font-extrabold leading-tight tracking-wider font-sans px-2">
-                    A grife do alto padrão <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-400">
-                      na grande São Paulo
-                    </span>
-                  </h1>
-
-                  <p className="text-base md:text-lg text-zinc-300 max-w-2xl mx-auto font-light leading-relaxed">
-                    Acabamento nobre superior, engenharia de ponta e valorização imobiliária certificada por contrato.
-                  </p>
-
-                  <div className="flex flex-wrap justify-center gap-4 mt-6">
                     <button 
                       onClick={() => {
                         setCurrentPage('contato');
@@ -1169,60 +1444,22 @@ export default function App() {
                           document.getElementById('lead-form-box')?.scrollIntoView({ behavior: 'smooth' });
                         }, 100);
                       }}
-                      className="btn-primary flex items-center gap-2"
+                      className="btn-secondary px-8 py-4 pointer-events-auto uppercase tracking-wider"
                     >
-                      <span>Falar com especialista</span>
-                      <ArrowRight size={16} />
+                      Falar com Especialista
                     </button>
                   </div>
+
+                  {/* Trust line */}
+                  <p 
+                    className="text-zinc-500/80 text-xs font-light mt-8 md:mt-10 opacity-0 animate-fade-up"
+                    style={{ animationDelay: "0.85s" }}
+                  >
+                    100% das obras entregues no prazo. Osasco & Barueri. Solidez construtiva.
+                  </p>
                 </div>
-              </div>
-
-              {/* Setas de navegação exclusivas do Slider (Estilo Dubai Luxury) - Alinhadas no Grid Centralizado do Site, ocultas em mobile */}
-              <div className="hidden md:flex absolute inset-x-0 top-1/2 -translate-y-1/2 w-full max-w-7xl mx-auto px-6 z-30 justify-between pointer-events-none">
-                <button 
-                  onClick={() => setActiveHeroSlide((prev) => (prev === 0 ? 1 : 0))}
-                  className="w-12 h-12 rounded-full border border-zinc-800 bg-black/40 text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 flex items-center justify-center transition-all duration-300 group shadow-2xl backdrop-blur-md pointer-events-auto"
-                  aria-label="Slide anterior"
-                >
-                  <ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
-                </button>
-                <button 
-                  onClick={() => setActiveHeroSlide((prev) => (prev === 0 ? 1 : 0))}
-                  className="w-12 h-12 rounded-full border border-zinc-800 bg-black/40 text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 flex items-center justify-center transition-all duration-300 group shadow-2xl backdrop-blur-md pointer-events-auto"
-                  aria-label="Próximo slide"
-                >
-                  <ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </div>
-
-              {/* Controles de navegação dos slides (Pontos/Dots inferiores de luxo) - Elevados para evitar sobreposição */}
-              <div className="absolute bottom-52 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-                <button 
-                  onClick={() => setActiveHeroSlide(0)}
-                  className={`w-3.5 h-1 rounded-full transition-all duration-300 ${activeHeroSlide === 0 ? 'bg-[#d81d00] w-7' : 'bg-zinc-700 hover:bg-zinc-500'}`}
-                  aria-label="Slide 1"
-                />
-                <button 
-                  onClick={() => setActiveHeroSlide(1)}
-                  className={`w-3.5 h-1 rounded-full transition-all duration-300 ${activeHeroSlide === 1 ? 'bg-[#d81d00] w-7' : 'bg-zinc-700 hover:bg-zinc-500'}`}
-                  aria-label="Slide 2"
-                />
-              </div>
-
-              {/* Icone animada de Scroll - Posicionada na base para separação geométrica perfeita (Sem texto Scroll) */}
-              <div 
-                className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer opacity-75 hover:opacity-100 transition-opacity"
-                onClick={() => {
-                  const nextSection = document.querySelector('section.py-24');
-                  nextSection?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                <div className="w-5 h-9 border border-zinc-700 rounded-full flex justify-center p-1">
-                  <div className="w-1.5 h-2 bg-[#d81d00] rounded-full animate-bounce"></div>
-                </div>
-              </div>
-            </section>
+              </section>
+            )}
 
             {/* 2. DESTAQUES DO PORTFÓLIO - Redesenho Monocromático Premium (Dark Luxury Integration) */}
             <section className="py-24 px-6 bg-black/40 border-t border-zinc-900 text-white relative">
@@ -3400,7 +3637,16 @@ export default function App() {
 
         {/* Copyright strip */}
         <div className="border-t border-zinc-900/60 py-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-[10px] text-zinc-500 gap-4 relative z-10 bg-transparent">
-          <p>© 2026 Dubai Incorporação e Construção. Todos os direitos reservados. Desenvolvimento de Alto Padrão.</p>
+          <p 
+            onClick={() => {
+              setCurrentPage('home2');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="cursor-pointer hover:text-zinc-300 transition-colors"
+            title="Acessar página de teste 3D"
+          >
+            © 2026 Dubai Incorporação e Construção. Todos os direitos reservados. Desenvolvimento de Alto Padrão.
+          </p>
         </div>
 
         {/* Créditos obrigatórios da New Humans */}
