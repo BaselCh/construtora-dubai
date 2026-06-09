@@ -443,3 +443,839 @@ section.reveal-visible button {
   opacity: var(--so3, 0) !important;
   transform: translate3d(0, var(--sy3, 0px), 0) rotate(var(--sr3, 0deg)) scale(var(--ss3, 1.2)) !important;
 }
+
+/* ========================================================================= */
+/* LIGHT MODE (VISÃO DIURNA) OVERRIDES                                       */
+/* ========================================================================= */
+.light-mode {
+  --bg-deep: #f7f7f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f0f0f4;
+  --border-color: #e2e2e7;
+  --border-hover: #c7c7cc;
+  
+  --text-primary: #080809;
+  --text-secondary: #48484a;
+  --text-muted: #8e8e93;
+}
+
+.light-mode body {
+  background-color: var(--bg-deep) !important;
+  color: var(--text-primary) !important;
+}
+
+.light-mode .pattern-bg:not(header *):not(.hero-section *) {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(216, 29, 0, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(149, 27, 30, 0.03) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z' fill='none' stroke='%23000000' stroke-opacity='0.02' stroke-width='1'/%3E%3Cpath d='M30 0 L30 30 L60 45 M30 30 L0 45 M30 30 L30 60' fill='none' stroke='%23000000' stroke-opacity='0.015' stroke-width='0.75'/%3E%3C/svg%3E") !important;
+}
+
+.light-mode .glass-panel:not(header):not(.hero-section) {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .glass-panel-hover:hover:not(header *):not(.hero-section *) {
+  background: #ffffff !important;
+  border-color: var(--dubai-red-bright) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 0 0 20px rgba(216, 29, 0, 0.04) !important;
+}
+
+.light-mode h1:not(header *):not(.hero-section *),
+.light-mode h2:not(header *):not(.hero-section *),
+.light-mode h3:not(header *):not(.hero-section *),
+.light-mode .serif-title:not(header *):not(.hero-section *),
+.light-mode .text-white:not(header *):not(.hero-section *) {
+  color: var(--text-primary) !important;
+}
+
+.light-mode p:not(header *):not(.hero-section *),
+.light-mode .text-zinc-300:not(header *):not(.hero-section *),
+.light-mode .text-zinc-400:not(header *):not(.hero-section *) {
+  color: var(--text-secondary) !important;
+}
+
+.light-mode .text-zinc-500:not(header *):not(.hero-section *),
+.light-mode .text-zinc-600:not(header *):not(.hero-section *) {
+  color: var(--text-muted) !important;
+}
+
+.light-mode .bg-zinc-950:not(header *):not(.hero-section *),
+.light-mode .bg-zinc-900:not(header *):not(.hero-section *),
+.light-mode .bg-black\/85:not(header *):not(.hero-section *),
+.light-mode .bg-black\/90:not(header *):not(.hero-section *),
+.light-mode .bg-black\/40:not(header *):not(.hero-section *) {
+  background-color: var(--bg-card) !important;
+}
+
+.light-mode .bg-red-950\/60:not(header *):not(.hero-section *) {
+  background-color: rgba(216, 29, 0, 0.05) !important;
+  border-color: rgba(216, 29, 0, 0.2) !important;
+}
+
+.light-mode .text-red-400:not(header *):not(.hero-section *) {
+  color: var(--dubai-red-medium) !important;
+}
+
+.light-mode .border-zinc-800:not(header *):not(.hero-section *),
+.light-mode .border-zinc-900:not(header *):not(.hero-section *),
+.light-mode .border-zinc-900\/60:not(header *):not(.hero-section *),
+.light-mode hr:not(header *):not(.hero-section *) {
+  border-color: var(--border-color) !important;
+}
+
+.light-mode input,
+.light-mode textarea,
+.light-mode select {
+  background-color: #ffffff !important;
+  color: #121214 !important;
+  border-color: #d1d1d6 !important;
+}
+
+.light-mode input:focus,
+.light-mode textarea:focus,
+.light-mode select:focus {
+  border-color: var(--dubai-red-bright) !important;
+}
+
+.light-mode .orb-1,
+.light-mode .orb-2,
+.light-mode .orb-3 {
+  opacity: 0.12 !important;
+}
+
+.light-mode .brand-geometry {
+  opacity: 0.08 !important;
+}
+
+/* --------------------------------------------------------- */
+/* SPECIFIC HERO & MENU (HEADER) TOTAL DARK THEME RETENTION  */
+/* --------------------------------------------------------- */
+/* Prevent light-mode style overrides inside the Header and Hero section */
+.light-mode header:not(.header-light),
+.light-mode header:not(.header-light) *,
+.light-mode .hero-section,
+.light-mode .hero-section * {
+  color: unset;
+}
+
+.hero-section {
+  background-color: #080809 !important;
+}
+/* Header Text, Links, and Buttons */
+.light-mode header:not(.header-light) .text-white,
+.light-mode header:not(.header-light) a,
+.light-mode header:not(.header-light) button.text-white,
+.light-mode header:not(.header-light) a.text-white {
+  color: #ffffff !important;
+}
+
+.light-mode header:not(.header-light) .text-zinc-400,
+.light-mode header:not(.header-light) button:not(.text-white) {
+  color: #a0a0a5 !important;
+}
+
+.light-mode header:not(.header-light) svg path {
+  stroke: #ffffff !important;
+}
+
+.light-mode header:not(.header-light).glass-panel {
+  background: rgba(18, 18, 20, 0.75) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: none !important;
+  border-bottom: 1px solid #222226 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.light-mode header:not(.header-light):not(.glass-panel) {
+  background-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+/* Light mode specific header overrides */
+.light-mode header.header-light {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid #e2e2e7 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode header.header-light .text-white,
+.light-mode header.header-light a,
+.light-mode header.header-light button.text-white,
+.light-mode header.header-light a.text-white {
+  color: #080809 !important;
+}
+
+.light-mode header.header-light .text-zinc-400,
+.light-mode header.header-light button:not(.text-white) {
+  color: #48484a !important;
+}
+
+.light-mode header.header-light svg path {
+  stroke: #080809 !important;
+}
+
+.light-mode header img[alt="Dubai Incorporação e Construção"] {
+  filter: none !important;
+}
+
+/* Hero Section Elements */
+.light-mode .hero-section h1,
+.light-mode .hero-section h1 * {
+  color: #ffffff !important;
+}
+
+.light-mode .hero-section h1 span.text-transparent {
+  color: transparent !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+}
+
+.light-mode .hero-section p,
+.light-mode .hero-section .text-zinc-300 {
+  color: #d4d4d8 !important;
+}
+
+.light-mode .hero-section .bg-black\/40 {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.light-mode .hero-section .border-zinc-800 {
+  border-color: #27272a !important;
+}
+
+.light-mode .hero-section .text-white {
+  color: #ffffff !important;
+}
+
+.light-mode .hero-section .bg-red-950\/60 {
+  background-color: rgba(69, 10, 10, 0.6) !important;
+  border-color: rgba(153, 27, 27, 0.4) !important;
+}
+
+.light-mode .hero-section .text-red-400 {
+  color: #f87171 !important;
+}
+
+.light-mode .hero-section button.btn-primary {
+  background: var(--dubai-gradient) !important;
+  color: #ffffff !important;
+}
+
+/* Force all buttons, CTA buttons, and floating actions to retain original Dark Mode styling */
+.light-mode .btn-primary,
+.light-mode a[role="button"],
+.light-mode .btn-primary * {
+  color: #ffffff !important;
+}
+
+/* Custom Category Tab Buttons */
+.portfolio-tab-btn {
+  color: #a0a0a5 !important;
+  border-bottom: 2px solid transparent !important;
+}
+
+.portfolio-tab-btn:hover {
+  color: #ffffff !important;
+}
+
+.portfolio-tab-btn-active {
+  color: #d81d00 !important;
+  border-bottom-color: #d81d00 !important;
+}
+
+/* Custom Category Tab Buttons in Light Mode */
+.light-mode .portfolio-tab-btn {
+  color: #8e8e93 !important;
+}
+
+.light-mode .portfolio-tab-btn:hover {
+  color: #080809 !important;
+}
+
+.light-mode .portfolio-tab-btn-active {
+  color: #d81d00 !important;
+  border-bottom-color: #d81d00 !important;
+}
+
+.light-mode span.text-zinc-800 {
+  color: var(--border-hover) !important; /* vertical separator | */
+}
+
+.light-mode .btn-primary {
+  background: var(--dubai-gradient) !important;
+  box-shadow: 0 4px 15px rgba(216, 29, 0, 0.2) !important;
+}
+
+.light-mode .btn-primary:hover {
+  box-shadow: 0 8px 25px rgba(216, 29, 0, 0.4) !important;
+}
+
+.light-mode .btn-secondary {
+  background: transparent !important;
+  border-color: #222226 !important;
+}
+
+.light-mode .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: #ffffff !important;
+}
+
+/* Floating contact buttons (bottom-right) */
+.light-mode .fixed.bottom-8 button,
+.light-mode .fixed.bottom-8 a,
+.light-mode .fixed.bottom-8 button *,
+.light-mode .fixed.bottom-8 a * {
+  color: #ffffff !important;
+}
+
+.light-mode .fixed.bottom-8 button,
+.light-mode .fixed.bottom-8 a {
+  background-color: rgba(18, 18, 20, 0.9) !important;
+  border-color: #222226 !important;
+}
+
+.light-mode .fixed.bottom-8 button:hover,
+.light-mode .fixed.bottom-8 a:hover {
+  border-color: rgba(216, 29, 0, 0.4) !important;
+  color: #d81d00 !important;
+}
+
+.light-mode .fixed.bottom-8 button:hover *,
+.light-mode .fixed.bottom-8 a:hover * {
+  color: #d81d00 !important;
+}
+
+.light-mode .fixed.bottom-8 button:hover span,
+.light-mode .fixed.bottom-8 a:hover span {
+  color: #ffffff !important;
+}
+
+.light-mode .fixed.bottom-8 span {
+  background-color: rgba(18, 18, 20, 0.95) !important;
+  border-color: #222226 !important;
+  color: #ffffff !important;
+}
+
+/* Overrides for Differentials title and Stats gradients in Light Mode */
+.light-mode .diferenciais-title-gradient {
+  background-image: linear-gradient(to right, #080809 0%, #48484a 50%, #d81d00 100%) !important;
+}
+
+.light-mode .stat-number-gradient {
+  background-image: linear-gradient(to bottom right, #080809 0%, #48484a 50%, #8e8e93 100%) !important;
+}
+
+.light-mode .group:hover .stat-number-gradient {
+  background-image: linear-gradient(to bottom right, #080809 0%, #48484a 30%, #d81d00 100%) !important;
+}
+
+/* Carousel Navigation Buttons styling (Tactile and elegant) */
+.carousel-nav-btn {
+  background-color: rgba(8, 8, 9, 0.4) !important;
+  border-color: #222226 !important;
+  color: #a0a0a5 !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.carousel-nav-btn:hover {
+  background-color: rgba(216, 29, 0, 0.1) !important;
+  border-color: #d81d00 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(216, 29, 0, 0.25) !important;
+}
+
+/* Light Mode overrides for Carousel Navigation Buttons */
+.light-mode .carousel-nav-btn {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e2e2e7 !important;
+  color: #48484a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.light-mode .carousel-nav-btn:hover {
+  background-color: rgba(216, 29, 0, 0.05) !important;
+  border-color: #d81d00 !important;
+  color: #d81d00 !important;
+  box-shadow: 0 4px 12px rgba(216, 29, 0, 0.12) !important;
+}
+
+.light-mode .carousel-nav-btn svg {
+  stroke: #080809 !important;
+  color: #080809 !important;
+}
+
+.light-mode .carousel-nav-btn:hover svg {
+  stroke: #d81d00 !important;
+  color: #d81d00 !important;
+}
+
+.light-mode .lead-form-card select option {
+  background-color: #ffffff !important;
+  color: #080809 !important;
+}
+
+/* Social Media Link Buttons */
+.social-link-btn {
+  background-color: rgba(8, 8, 9, 0.4) !important;
+  border: 1px solid #222226 !important;
+  color: #a0a0a5 !important;
+  transition: all 0.3s ease !important;
+}
+
+.social-link-btn:hover {
+  background-color: rgba(216, 29, 0, 0.1) !important;
+  border-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
+/* Light Mode overrides for Social Media Link Buttons */
+.light-mode .social-link-btn {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e2e2e7 !important;
+  color: #48484a !important;
+}
+
+.light-mode .social-link-btn:hover {
+  background-color: rgba(216, 29, 0, 0.05) !important;
+  border-color: #d81d00 !important;
+  color: #d81d00 !important;
+}
+
+/* Footer logo adjustments for Light Mode */
+.light-mode footer img[alt="Dubai Incorporação e Construção"] {
+  filter: none !important;
+}/* Hide footer glow in Light Mode to prevent grey/dark spot on white background */
+.light-mode .footer-glow {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Light Mode Footer link adjustments */
+.light-mode footer {
+  background-color: var(--bg-deep) !important;
+  border-top-color: var(--border-color) !important;
+}
+
+.light-mode footer button,
+.light-mode footer a {
+  color: var(--text-primary) !important;
+}
+
+.light-mode footer button:hover,
+.light-mode footer a:hover {
+  color: #d81d00 !important;
+}
+
+.light-mode footer p,
+.light-mode footer span {
+  color: var(--text-secondary) !important;
+}
+
+.light-mode footer .bg-black\/90 {
+  background-color: #f0f0f4 !important;
+  border-top-color: var(--border-color) !important;
+}
+
+/* Remove black borders from differentials section in light mode */
+.light-mode .diferenciais-secao {
+  border-top-color: transparent !important;
+}
+
+.light-mode #sobre-nos-secao {
+  border-top-color: transparent !important;
+}
+
+.light-mode .insights-secao {
+  border-top-color: transparent !important;
+}
+
+/* Light mode styles for search overlay */
+.light-mode .search-overlay {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+}
+
+.light-mode .search-overlay button[aria-label="Fechar Pesquisa"] {
+  background-color: #ffffff !important;
+  border-color: #e2e2e7 !important;
+  color: #080809 !important;
+}
+
+.light-mode .search-overlay button[aria-label="Fechar Pesquisa"]:hover {
+  background-color: #d81d00 !important;
+  border-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
+.light-mode .search-overlay input {
+  color: #080809 !important;
+  border-bottom-color: #e2e2e7 !important;
+}
+
+.light-mode .search-overlay input:focus {
+  border-bottom-color: #d81d00 !important;
+}
+
+.light-mode .search-overlay input::placeholder {
+  color: #8e8e93 !important;
+}
+
+.light-mode .search-overlay .flex.flex-wrap.justify-center.gap-3 button {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #e2e2e7 !important;
+  color: #48484a !important;
+}
+
+.light-mode .search-overlay .flex.flex-wrap.justify-center.gap-3 button:hover {
+  background-color: rgba(216, 29, 0, 0.05) !important;
+  border-color: #d81d00 !important;
+  color: #d81d00 !important;
+}
+
+.light-mode .search-overlay .overflow-y-auto {
+  border-top-color: #e2e2e7 !important;
+}
+
+.light-mode .search-overlay .overflow-y-auto > div {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #e2e2e7 !important;
+}
+
+.light-mode .search-overlay .overflow-y-auto > div:hover {
+  border-color: #d81d00 !important;
+  box-shadow: 0 4px 12px rgba(216, 29, 0, 0.08) !important;
+}
+
+.light-mode .search-overlay .overflow-y-auto > div h4 {
+  color: #080809 !important;
+}
+
+.light-mode .search-overlay .overflow-y-auto > div:hover h4 {
+  color: #d81d00 !important;
+}
+
+.light-mode .search-overlay .overflow-y-auto > div p {
+  color: #48484a !important;
+}
+
+/* Light mode overrides for filter card */
+.light-mode .filter-card {
+  background-color: #f7f7f9 !important;
+  border-color: #e2e2e7 !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .filter-card h3 {
+  color: #080809 !important;
+}
+
+.light-mode .filter-card label {
+  color: #8e8e93 !important;
+}
+
+.light-mode .filter-card select {
+  background-color: #ffffff !important;
+  color: #080809 !important;
+  border-color: #e2e2e7 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2348484a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+.light-mode .filter-card select:focus {
+  border-color: #d81d00 !important;
+}
+
+/* Light mode overrides for btn-secondary */
+.light-mode .btn-secondary {
+  background: transparent !important;
+  border-color: #080809 !important;
+  color: #080809 !important;
+}
+
+.light-mode .btn-secondary * {
+  color: #080809 !important;
+}
+
+.light-mode .btn-secondary:hover {
+  background: #080809 !important;
+  border-color: #080809 !important;
+  color: #ffffff !important;
+}
+
+.light-mode .btn-secondary:hover * {
+  color: #ffffff !important;
+}
+
+/* Light mode overrides for contato page */
+.light-mode .contact-segment-btn {
+  background-color: #f5f5f7 !important;
+  border-color: #e5e5ea !important;
+  color: #48484a !important;
+}
+
+.light-mode .contact-segment-btn:hover {
+  background-color: #e5e5ea !important;
+  border-color: #a0a0a5 !important;
+  color: #1d1d1f !important;
+}
+
+.light-mode .contact-segment-btn.active {
+  background-color: #ffffff !important;
+  border-color: #d81d00 !important;
+  color: #d81d00 !important;
+  box-shadow: 0 4px 15px rgba(216, 29, 0, 0.1) !important;
+}
+
+.light-mode .contact-form-card {
+  background-color: #f7f7f9 !important;
+  border-color: #e2e2e7 !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .contact-form-card h3 {
+  color: #1d1d1f !important;
+}
+
+.light-mode .contact-form-card p,
+.light-mode .contact-form-card span:not(.text-white):not(.text-white-forced):not(.text-red-500) {
+  color: #48484a !important;
+}
+
+/* Radio label question text */
+.light-mode .contact-form-card .font-bold.text-white {
+  color: #1d1d1f !important;
+}
+
+/* Style the file input button inside contact form */
+.light-mode .contact-form-card label.bg-zinc-800 {
+  background-color: #e5e5ea !important;
+  border-color: #d4d4d8 !important;
+  color: #1d1d1f !important;
+}
+
+.light-mode .contact-form-card label.bg-zinc-800:hover {
+  background-color: #d4d4d8 !important;
+  border-color: #a0a0a5 !important;
+  color: #1d1d1f !important;
+}
+
+/* select arrow dropdown override */
+.light-mode .contact-form-card select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2348484a' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+/* Enviar submit button */
+.light-mode .contact-form-card button[type="submit"] {
+  background-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
+.light-mode .contact-form-card button[type="submit"]:hover {
+  background-color: #c01a00 !important;
+  box-shadow: 0 8px 25px rgba(216, 29, 0, 0.25) !important;
+}
+
+.light-mode .text-white-forced,
+.text-white-forced {
+  color: #ffffff !important;
+}
+
+/* Float map action buttons override to remain dark */
+.light-mode .map-floating-btn {
+  background-color: rgba(8, 8, 9, 0.95) !important;
+  border-color: #222226 !important;
+  color: #ffffff !important;
+}
+
+.light-mode .map-floating-btn:hover {
+  border-color: rgba(216, 29, 0, 0.4) !important;
+  color: #ffffff !important;
+}
+
+/* Light mode Ouvidoria disclaimer box background adjustment */
+.light-mode .denuncia-disclaimer-box {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border-color: #e5e5ea !important;
+  color: #1d1d1f !important;
+}
+
+.light-mode .denuncia-disclaimer-box p,
+.light-mode .denuncia-disclaimer-box span {
+  color: #1d1d1f !important;
+}
+
+/* Light mode voltar-bar override to keep it dark */
+.light-mode .voltar-bar,
+.light-mode .voltar-bar.bg-zinc-950 {
+  background-color: #080809 !important;
+  background: #080809 !important;
+  border-bottom-color: #222226 !important;
+}
+
+.light-mode .voltar-bar button {
+  color: #a0a0a5 !important;
+}
+
+.light-mode .voltar-bar button:hover {
+  color: #ffffff !important;
+}
+
+.light-mode .voltar-bar svg path {
+  stroke: #a0a0a5 !important;
+}
+
+.light-mode .voltar-bar button:hover svg path {
+  stroke: #ffffff !important;
+}
+
+/* Light mode Relatório Técnico Button override */
+.light-mode .relatorio-tecnico-btn {
+  background-color: #ffffff !important;
+  border-color: #e5e5ea !important;
+}
+
+.light-mode .relatorio-tecnico-btn:hover {
+  background-color: #f5f5f7 !important;
+  border-color: #d81d00 !important;
+}
+
+.light-mode .relatorio-tecnico-btn span {
+  color: #1d1d1f !important;
+}
+
+.light-mode .relatorio-tecnico-btn span.text-zinc-500 {
+  color: #8e8e93 !important;
+}
+
+/* Global Light Mode Red Background Button Contrast Fix */
+.light-mode .bg-\[\#d81d00\],
+.light-mode [class*="bg-[#d81d00]"] {
+  color: #ffffff !important;
+}
+
+.light-mode .bg-\[\#d81d00\] *,
+.light-mode [class*="bg-[#d81d00]"] * {
+  color: #ffffff !important;
+}
+
+.light-mode .hover\:bg-\[\#d81d00\]:hover,
+.light-mode [class*="hover:bg-[#d81d00]"]:hover {
+  background-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
+.light-mode .hover\:bg-\[\#d81d00\]:hover *,
+.light-mode [class*="hover:bg-[#d81d00]"]:hover * {
+  color: #ffffff !important;
+}
+
+/* --------------------------------------------------------- */
+/* DETALHE PAGE LIGHT MODE CORRECTIONS                      */
+/* --------------------------------------------------------- */
+
+/* Lead Form Card adaptations in Light Mode */
+.light-mode .lead-form-card {
+  background-color: #ffffff !important;
+  border-color: #e2e2e7 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .lead-form-card h3 {
+  color: #080809 !important;
+}
+
+.light-mode .lead-form-card input,
+.light-mode .lead-form-card select,
+.light-mode .lead-form-card textarea {
+  background-color: #f7f7f9 !important;
+  border-color: #e2e2e7 !important;
+  color: #080809 !important;
+}
+
+.light-mode .lead-form-card label,
+.light-mode .lead-form-card p,
+.light-mode .lead-form-card span:not(.text-white-forced):not(.text-red-500) {
+  color: #48484a !important;
+}
+
+/* Plantas Section Type selector bar in Light Mode */
+.light-mode .plantas-type-bar {
+  background-color: #e5e5ea !important;
+  border-color: #d1d1d6 !important;
+}
+
+.light-mode .plantas-type-bar button:not(.text-white-forced) {
+  color: #48484a !important;
+}
+
+.light-mode .plantas-type-bar button:not(.text-white-forced):hover {
+  color: #080809 !important;
+}
+
+/* Concept Video Block & Gallery Card Overlay protection */
+.light-mode .concept-video-card,
+.light-mode .concept-video-card .bg-zinc-950,
+.light-mode .status-gallery-card,
+.light-mode .status-gallery-card .bg-zinc-950 {
+  background-color: #09090b !important;
+  border-color: #222226 !important;
+}
+
+.light-mode .concept-video-card h3,
+.light-mode .concept-video-card .text-white,
+.light-mode .status-gallery-card h4,
+.light-mode .status-gallery-card .text-white {
+  color: #ffffff !important;
+}
+
+.light-mode .concept-video-card .text-zinc-450,
+.light-mode .concept-video-card .text-zinc-400,
+.light-mode .status-gallery-card .text-zinc-450,
+.light-mode .status-gallery-card .text-zinc-400 {
+  color: #a1a1aa !important;
+}
+
+.light-mode .concept-video-card .text-zinc-500,
+.light-mode .status-gallery-card .text-zinc-500 {
+  color: #71717a !important;
+}
+
+.light-mode .concept-video-card .bg-red-950\/40 {
+  background-color: rgba(69, 10, 10, 0.4) !important;
+  border-color: rgba(153, 27, 27, 0.3) !important;
+}
+
+/* Voltar Bar border alignment in light mode */
+.light-mode .voltar-bar,
+.light-mode .voltar-bar.bg-zinc-950 {
+  background-color: #080809 !important;
+  background: #080809 !important;
+  border-bottom-color: #222226 !important;
+}
+
+.light-mode .voltar-bar button {
+  color: #a0a0a5 !important;
+}
+
+.light-mode .voltar-bar button:hover {
+  color: #ffffff !important;
+}
+
+.light-mode .voltar-bar svg path {
+  stroke: #a0a0a5 !important;
+}
+
+.light-mode .voltar-bar button:hover svg path {
+  stroke: #ffffff !important;
+}
+
+
+
+

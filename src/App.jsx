@@ -24,7 +24,9 @@ import {
   ArrowUpRight,
   X,
   ChevronDown,
-  Play
+  Play,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 function CanvasHexagonGrid() {
@@ -471,6 +473,19 @@ export default function App() {
   const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] = useState('authoria');
   const [isSpotlightActive, setIsSpotlightActive] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [isLightMode, setIsLightMode] = useState(() => {
+    return localStorage.getItem('theme-mode') === 'light';
+  });
+
+  useEffect(() => {
+    if (isLightMode) {
+      document.documentElement.classList.add('light-mode');
+      localStorage.setItem('theme-mode', 'light');
+    } else {
+      document.documentElement.classList.remove('light-mode');
+      localStorage.setItem('theme-mode', 'dark');
+    }
+  }, [isLightMode]);
   
   // Estado para controlar a abertura do menu de navegação do wireframe
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -478,6 +493,8 @@ export default function App() {
   // Estado para controlar o segmento ativo na página de contato do wireframe
   const [contactSegment, setContactSegment] = useState('cliente'); // 'cliente' | 'vizinho' | 'fornecedor' | 'corretor' | 'trabalhar' | 'denuncia'
   const [desejaIdentificar, setDesejaIdentificar] = useState(false);
+
+  const isHeaderLight = isLightMode && (scrollY > 20 || currentPage === 'detalhe' || currentPage === 'contato');
 
   // Estados para busca inteligente global
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -911,13 +928,10 @@ export default function App() {
         }}
       ></div>
 
-      {/* Dramatic Ambient Dim Overlay when Spotlight is active and scrolled past the Hero section - ACTIVE ONLY ON DESKTOP */}
-      <div className={`hidden md:block fixed inset-0 bg-black/25 pointer-events-none z-0 transition-opacity duration-[1000ms] ${isSpotlightActive ? 'opacity-100' : 'opacity-0'}`}></div>
-
-      {/* ========================================================================= */}
+      {/* Dramatic Ambient Dim Overlay when Spotlight is active and scrolled past the Hero section - ACTIVE ONLY ON DESKTOP       {/* ========================================================================= */}
       {/* HEADER GLOBAL - Layout Centralizado & Menu Dinâmico do Wireframe */}
       {/* ========================================================================= */}
-      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrollY > 20 ? 'glass-panel border-b border-zinc-950/80 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrollY > 20 || currentPage === 'detalhe' ? 'glass-panel border-b border-zinc-955 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
           {/* Lado Esquerdo: Menu hambúrguer interativo + Links horizontais no estado Aberto */}
@@ -1091,7 +1105,7 @@ export default function App() {
       {/* OVERLAY DE BUSCA MINIMALISTA E IMERSIVA (Para Desktop e Mobile) */}
       {/* ========================================================================= */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-center items-center p-6 animate-fade-in-up">
+        <div className="search-overlay fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-center items-center p-6 animate-fade-in-up">
           <div className="max-w-2xl w-full flex flex-col gap-6 text-center">
             {/* Safe, non-overlapping Close Button centered perfectly at the top of the layout flow */}
             <button 
@@ -1182,8 +1196,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Espaçador de Cabeçalho */}
-      {currentPage !== 'home' && currentPage !== 'home2' && <div className="h-20"></div>}
+      {/* Espaçador de Cabeçalho - Exclui páginas que têm seus próprios heros integrados */}
+      {currentPage !== 'home' && currentPage !== 'home2' && currentPage !== 'empreendimentos' && currentPage !== 'detalhe' && currentPage !== 'contato' && <div className="h-20"></div>}
 
       {/* ========================================================================= */}
       {/* CONTEÚDO PRINCIPAL - Sistema de Rotas */}
@@ -1198,7 +1212,7 @@ export default function App() {
             
             {currentPage === 'home' ? (
               /* 1. HERO SECTION - LUXO PARALLAX E SLIDER (IMAGEM E VÍDEO) */
-              <section className="relative h-screen overflow-hidden bg-transparent flex items-center justify-center">
+              <section className="hero-section relative h-screen overflow-hidden bg-transparent flex items-center justify-center">
                 
                 {/* ---------------- SLIDE 1: IMAGEM DE LUXO ---------------- */}
                 <div 
@@ -1258,7 +1272,7 @@ export default function App() {
                     }}
                   >
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-red-800/40 w-fit mx-auto animate-pulse">
-                      <Sparkles size={14} className="text-red-500" />
+                      <Sparkles size={14} className="text-white" />
                       <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
                         Quem compara compra Dubai • Obras Entregues no Prazo
                       </span>
@@ -1300,7 +1314,7 @@ export default function App() {
                     }}
                   >
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/60 border border-red-800/40 w-fit mx-auto animate-pulse">
-                      <Sparkles size={14} className="text-red-500" />
+                      <Sparkles size={14} className="text-white" />
                       <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
                         DNA Dubai • Solidez, Segurança e Alto Padrão
                       </span>
@@ -1381,7 +1395,7 @@ export default function App() {
               </section>
             ) : (
               /* 1. HERO SECTION - SPLINE 3D HERO (DUBAI CONSTRUTORA BRAND THEME) */
-              <section className="relative min-h-screen flex items-center justify-center bg-[#080809] overflow-hidden font-sora">
+              <section className="hero-section relative min-h-screen flex items-center justify-center bg-[#080809] overflow-hidden font-sora">
                 {/* Spline 3D Background (absolute, full-size) with color matrix filter shifting green to red */}
                 <div className="absolute inset-0 z-0">
                   <React.Suspense fallback={<div className="absolute inset-0 bg-[#080809] animate-pulse" />}>
@@ -1585,7 +1599,7 @@ export default function App() {
             </section>
 
             {/* 3. SEÇÃO DE DIFERENCIAIS E ESTATÍSTICAS - Redesenhado Premium */}
-            <section className="py-28 px-6 border-t border-zinc-950/80 relative overflow-hidden">
+            <section className="diferenciais-secao py-28 px-6 border-t border-zinc-950/80 relative overflow-hidden">
               {/* Elementos de iluminação/glow premium no fundo */}
               <div className="absolute top-1/4 -left-10 w-96 h-96 bg-red-950/10 rounded-full blur-[120px] pointer-events-none"></div>
               <div className="absolute bottom-1/4 -right-10 w-96 h-96 bg-red-900/5 rounded-full blur-[150px] pointer-events-none"></div>
@@ -1601,7 +1615,7 @@ export default function App() {
                       </span>
                       <h2 className="text-4xl lg:text-5xl text-white uppercase font-extrabold tracking-tight leading-[1.1] mb-6">
                         Diferenciais <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-300 to-red-500">e Qualidade Dubai</span>
+                        <span className="diferenciais-title-gradient text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-300 to-red-500">e Qualidade Dubai</span>
                       </h2>
                       <div className="w-16 h-[2px] bg-red-600 mb-6"></div>
                       <p className="text-sm text-zinc-400 font-light leading-relaxed max-w-lg">
@@ -1617,7 +1631,7 @@ export default function App() {
                         <div className="absolute -left-3 top-0 w-[2px] h-0 bg-red-600 group-hover:h-full transition-all duration-500"></div>
                         <div className="pl-2">
                           <div className="text-4xl lg:text-5xl font-extrabold text-white tracking-tight flex items-baseline">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
+                            <span className="stat-number-gradient bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
                               9
                             </span>
                           </div>
@@ -1632,7 +1646,7 @@ export default function App() {
                         <div className="absolute -left-3 top-0 w-[2px] h-0 bg-red-600 group-hover:h-full transition-all duration-500"></div>
                         <div className="pl-2">
                           <div className="text-4xl lg:text-5xl font-extrabold text-white tracking-tight flex items-baseline">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
+                            <span className="stat-number-gradient bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
                               457
                             </span>
                           </div>
@@ -1647,7 +1661,7 @@ export default function App() {
                         <div className="absolute -left-3 top-0 w-[2px] h-0 bg-red-600 group-hover:h-full transition-all duration-500"></div>
                         <div className="pl-2">
                           <div className="text-4xl lg:text-5xl font-extrabold text-white tracking-tight flex items-baseline">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
+                            <span className="stat-number-gradient bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
                               +112mil
                             </span>
                           </div>
@@ -1662,7 +1676,7 @@ export default function App() {
                         <div className="absolute -left-3 top-0 w-[2px] h-0 bg-red-600 group-hover:h-full transition-all duration-500"></div>
                         <div className="pl-2">
                           <div className="text-4xl lg:text-5xl font-extrabold text-white tracking-tight flex items-baseline">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
+                            <span className="stat-number-gradient bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-100 to-zinc-400 group-hover:to-red-500 transition-colors duration-300">
                               +3,1mil
                             </span>
                           </div>
@@ -1840,7 +1854,7 @@ export default function App() {
             </section>
 
             {/* 5. SEÇÃO DE INSIGHTS - Redesenhado Premium */}
-            <section className="py-28 px-6 border-t border-zinc-950 relative overflow-hidden">
+            <section className="insights-secao py-28 px-6 border-t border-zinc-950 relative overflow-hidden">
               {/* Elementos geométricos / glow no fundo */}
               <div className="absolute top-1/2 right-10 w-96 h-96 bg-red-900/5 rounded-full blur-[150px] pointer-events-none"></div>
               
@@ -1859,10 +1873,10 @@ export default function App() {
                   
                   {/* Navegação Seta Carrossel */}
                   <div className="flex gap-3">
-                    <button className="w-12 h-12 rounded border border-zinc-900 bg-zinc-950/40 text-zinc-400 hover:text-white hover:border-red-800 flex items-center justify-center transition-all duration-300">
+                    <button className="carousel-nav-btn w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-300">
                       <ChevronLeft size={20} />
                     </button>
-                    <button className="w-12 h-12 rounded border border-zinc-900 bg-zinc-950/40 text-zinc-400 hover:text-white hover:border-red-800 flex items-center justify-center transition-all duration-300">
+                    <button className="carousel-nav-btn w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-300">
                       <ChevronRight size={20} />
                     </button>
                   </div>
@@ -1963,7 +1977,7 @@ export default function App() {
         {currentPage === 'empreendimentos' && (
           <div className="animate-fade-in-up pb-24">
             {/* The Big Luxury Banner */}
-            <div className="relative bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border-b border-zinc-900/60 py-32 px-6 overflow-hidden">
+            <div className="hero-section relative bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border-b border-zinc-900/60 py-32 px-6 overflow-hidden">
               {/* Ambient premium lights specifically for this banner */}
               <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-900 rounded-full blur-[100px]"></div>
@@ -1981,7 +1995,7 @@ export default function App() {
 
             {/* Overlapping Search Card from the Wireframe */}
             <div className="relative -mt-16 md:-mt-20 z-20 max-w-4xl mx-auto w-full px-6">
-              <div className="bg-zinc-950/95 border border-zinc-900 p-6 md:p-8 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-3xl">
+              <div className="filter-card bg-zinc-950/95 border border-zinc-900 p-6 md:p-8 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-3xl">
                 <h3 className="text-center text-sm md:text-base font-bold text-white tracking-widest uppercase mb-6">
                   Encontre o imóvel ideal para você
                 </h3>
@@ -2156,7 +2170,7 @@ export default function App() {
           <div className="animate-fade-in-up pb-20">
             
             {/* Nav / Voltar Bar */}
-            <div className="bg-zinc-950 border-b border-zinc-900/60 py-4 px-6 sticky top-[72px] z-30 backdrop-blur-md bg-opacity-90">
+            <div className="voltar-bar bg-zinc-950 border-b border-zinc-900/60 py-4 px-6 sticky top-[72px] z-30 backdrop-blur-md bg-opacity-90">
               <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <button 
                   onClick={() => setCurrentPage('empreendimentos')}
@@ -2169,7 +2183,7 @@ export default function App() {
             </div>
 
             {/* 1. HERO DO EMPREENDIMENTO (DESIGN ULTRA LUXO COM FORMULÁRIO ACOPLADO) */}
-            <section className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center py-20 lg:py-28 px-6 overflow-hidden">
+            <section className="hero-section relative min-h-[85vh] lg:min-h-[90vh] flex items-center py-20 lg:py-28 px-6 overflow-hidden">
               {/* Ambient Background Blur Lights */}
               <div className="absolute inset-0 z-0">
                 <img 
@@ -2188,16 +2202,16 @@ export default function App() {
                 {/* Lado Esquerdo: Detalhes do Empreendimento */}
                 <div className="lg:col-span-7 text-left flex flex-col justify-center">
                   <div className="flex flex-wrap items-center gap-3 mb-6">
-                    <span className="bg-red-950/80 text-red-500 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-900/40 shadow-lg">
+                    <span className="bg-red-950/80 text-white-forced text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border border-red-900/40 shadow-lg">
                       {currentEmpreendimento.statusLabel}
                     </span>
-                    <div className="flex items-center gap-1.5 text-zinc-400 text-xs tracking-wider uppercase bg-zinc-900/85 px-4 py-1.5 rounded-full border border-zinc-800/50 shadow-md">
+                    <div className="flex items-center gap-1.5 text-white-forced text-xs tracking-wider uppercase bg-zinc-900/85 px-4 py-1.5 rounded-full border border-zinc-800/50 shadow-md">
                       <MapPin size={12} className="text-red-500" />
-                      <span>{currentEmpreendimento.bairro}, {currentEmpreendimento.cidade}</span>
+                      <span className="text-white-forced">{currentEmpreendimento.bairro}, {currentEmpreendimento.cidade}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-zinc-400 text-xs tracking-wider uppercase bg-zinc-900/85 px-4 py-1.5 rounded-full border border-zinc-800/50 shadow-md">
+                    <div className="flex items-center gap-1.5 text-white-forced text-xs tracking-wider uppercase bg-zinc-900/85 px-4 py-1.5 rounded-full border border-zinc-800/50 shadow-md">
                       <Calendar size={12} className="text-red-500" />
-                      <span>ENTREGA: {currentEmpreendimento.entrega || (currentEmpreendimento.status === 'Pronto' ? 'IMEDIATA' : 'NOV/2029')}</span>
+                      <span className="text-white-forced font-bold">ENTREGA: {currentEmpreendimento.entrega || (currentEmpreendimento.status === 'Pronto' ? 'IMEDIATA' : 'NOV/2029')}</span>
                     </div>
                   </div>
                   
@@ -2217,7 +2231,7 @@ export default function App() {
                       { label: 'Garagem', value: currentEmpreendimento.vagas || '2 a 3 Vagas', icon: Compass }
                     ].map((stat, idx) => (
                       <InteractiveTiltCard key={idx} className="bg-zinc-950/85 border border-zinc-900/85 p-4.5 rounded-xl backdrop-blur-md shadow-xl flex items-center gap-4 hover:border-red-650/20 transition-all duration-300 group cursor-pointer">
-                        <div className="p-3 bg-red-950/40 rounded-lg text-red-500 border border-red-900/30 group-hover:bg-[#d81d00] group-hover:text-white transition-colors duration-300 flex-shrink-0">
+                        <div className="p-3 bg-red-955/20 border border-red-900/30 rounded-lg text-red-500 group-hover:bg-[#d81d00] group-hover:text-white-forced transition-colors duration-300 flex-shrink-0">
                           <stat.icon size={16} />
                         </div>
                         <div className="flex flex-col text-left">
@@ -2235,9 +2249,9 @@ export default function App() {
                         setLeadForm(prev => ({ ...prev, mensagem: `Desejo receber o catálogo PDF completo do ${currentEmpreendimento.nome}` }));
                         document.getElementById('lead-form-box')?.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      className="btn-primary !py-3 !px-8 !text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg group/btn"
+                      className="btn-primary text-white-forced !py-3 !px-8 !text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg group/btn"
                     >
-                      <FileText size={16} className="text-white group-hover/btn:scale-110 transition-transform" />
+                      <FileText size={16} className="text-white-forced group-hover/btn:scale-110 transition-transform" />
                       <span>Ver Detalhes</span>
                     </button>
                   </div>
@@ -2245,8 +2259,8 @@ export default function App() {
 
                 {/* Lado Direito: Formulário da Wireframe */}
                 <div className="lg:col-span-5 w-full">
-                  <div className="border border-zinc-800/80 hover:border-red-950/20 rounded-3xl bg-zinc-950/90 backdrop-blur-2xl p-8 shadow-[0_25px_60px_rgba(0,0,0,0.95)] relative text-left transition-all duration-500 group/form">
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-6 leading-tight tracking-wide font-sans">
+                  <div className="lead-form-card border border-zinc-800/80 hover:border-red-955/20 rounded-3xl bg-zinc-950/90 backdrop-blur-2xl p-8 shadow-[0_25px_60px_rgba(0,0,0,0.95)] relative text-left transition-all duration-500 group/form">
+                    <h3 className={`text-xl md:text-2xl font-bold ${isLightMode ? 'text-[#080809]' : 'text-white'} mb-6 leading-tight tracking-wide font-sans`}>
                       Fale com um de nossos especialistas!
                     </h3>
 
@@ -2330,11 +2344,11 @@ export default function App() {
                             onClick={() => setPrivacyAgreed(!privacyAgreed)}
                             className="w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-all duration-200 mt-0.5 flex-shrink-0"
                             style={{
-                              borderColor: privacyAgreed ? '#d81d00' : '#ffffff',
+                              borderColor: privacyAgreed ? '#d81d00' : (isLightMode ? '#a0a0a5' : '#ffffff'),
                               backgroundColor: privacyAgreed ? '#d81d00' : 'transparent'
                             }}
                           >
-                            {privacyAgreed && <span className="text-[10px] text-white font-black select-none">✓</span>}
+                            {privacyAgreed && <span className="text-[10px] text-white-forced font-black select-none">✓</span>}
                           </div>
                           <input 
                             type="checkbox" 
@@ -2355,11 +2369,11 @@ export default function App() {
                             onClick={() => setCommAgreed(!commAgreed)}
                             className="w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-all duration-200 mt-0.5 flex-shrink-0"
                             style={{
-                              borderColor: commAgreed ? '#d81d00' : '#ffffff',
+                              borderColor: commAgreed ? '#d81d00' : (isLightMode ? '#a0a0a5' : '#ffffff'),
                               backgroundColor: commAgreed ? '#d81d00' : 'transparent'
                             }}
                           >
-                            {commAgreed && <span className="text-[10px] text-white font-black select-none">✓</span>}
+                            {commAgreed && <span className="text-[10px] text-white-forced font-black select-none">✓</span>}
                           </div>
                           <input 
                             type="checkbox" 
@@ -2377,7 +2391,7 @@ export default function App() {
                         <div className="flex justify-end mt-4">
                           <button 
                             type="submit" 
-                            className="bg-white hover:bg-zinc-100 text-zinc-950 font-bold uppercase tracking-wider text-xs px-8 py-3 rounded-xl transition-all duration-300 shadow-lg cursor-pointer transform hover:-translate-y-0.5"
+                            className={`${isLightMode ? 'bg-[#d81d00] hover:bg-[#c01a00] text-white-forced font-bold' : 'bg-white hover:bg-zinc-100 text-zinc-950 font-bold'} uppercase tracking-wider text-xs px-8 py-3 rounded-xl transition-all duration-300 shadow-lg cursor-pointer transform hover:-translate-y-0.5`}
                           >
                             Enviar
                           </button>
@@ -2438,7 +2452,7 @@ export default function App() {
                               setActiveDecoradoIndex(idx);
                               setActiveDecoradoPhotoIndex(0);
                             }}
-                            className={`px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${activeDecoradoIndex === idx ? 'bg-[#d81d00] text-white shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
+                            className={`px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${activeDecoradoIndex === idx ? 'bg-[#d81d00] text-white-forced shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
                           >
                             {sizeLabel}
                           </button>
@@ -2474,7 +2488,7 @@ export default function App() {
                   <div className="relative flex items-center justify-center max-w-full px-12 group/thumb">
                     <button
                       onClick={() => setActiveDecoradoPhotoIndex(prev => prev === 0 ? currentDecoradoPhotos.length - 1 : prev - 1)}
-                      className="absolute left-0 p-2.5 bg-zinc-950 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
+                      className="carousel-nav-btn absolute left-0 p-2.5 bg-zinc-950 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
                     >
                       <ChevronLeft size={16} />
                     </button>
@@ -2496,7 +2510,7 @@ export default function App() {
 
                     <button
                       onClick={() => setActiveDecoradoPhotoIndex(prev => (prev + 1) % currentDecoradoPhotos.length)}
-                      className="absolute right-0 p-2.5 bg-zinc-950 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
+                      className="carousel-nav-btn absolute right-0 p-2.5 bg-zinc-950 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
                     >
                       <ChevronRight size={16} />
                     </button>
@@ -2523,7 +2537,7 @@ export default function App() {
                             setActiveAreaTab(size);
                             setIs3DMode(false); // Reset to 2D view on tab switch
                           }}
-                          className={`px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${activeAreaTab === size ? 'bg-[#d81d00] text-white shadow-lg shadow-red-950/40' : 'text-zinc-500 hover:text-white'}`}
+                          className={`px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${activeAreaTab === size ? 'bg-[#d81d00] text-white-forced shadow-lg shadow-red-950/40' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                           {size}
                         </button>
@@ -2579,12 +2593,12 @@ export default function App() {
 
                       {/* Bottom Type selectors (Tipo 1 to Tipo 6) */}
                       <div className="mt-8">
-                        <div className="flex flex-wrap gap-1.5 bg-zinc-900/50 p-1 rounded-xl border border-zinc-900">
+                        <div className="flex flex-wrap gap-1.5 bg-zinc-900/50 p-1 rounded-xl border border-zinc-900 plantas-type-bar">
                           {['Tipo 1', 'Tipo 2', 'Tipo 3', 'Tipo 4', 'Tipo 5', 'Tipo 6'].map((tipo) => (
                             <button
                               key={tipo}
                               onClick={() => setActiveTipoTab(tipo)}
-                              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${activeTipoTab === tipo ? 'bg-[#d81d00] text-white shadow-md' : 'text-zinc-500 hover:text-zinc-300'}`}
+                              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${activeTipoTab === tipo ? 'bg-[#d81d00] text-white-forced shadow-md' : 'text-zinc-500 hover:text-zinc-300'}`}
                             >
                               {tipo}
                             </button>
@@ -2741,7 +2755,7 @@ export default function App() {
 
                 {/* Seção de Vídeo Conceito - Redesenhado Ultra Premium */}
                 <div className="w-full text-center mt-12">
-                  <div className="relative rounded-2xl overflow-hidden border border-zinc-900 bg-zinc-950 shadow-2xl aspect-video md:aspect-[21/9] max-w-7xl mx-auto group/video cursor-pointer">
+                  <div className="concept-video-card relative rounded-2xl overflow-hidden border border-zinc-900 bg-zinc-950 shadow-2xl aspect-video md:aspect-[21/9] max-w-7xl mx-auto group/video cursor-pointer">
                     <video
                       ref={(el) => {
                         if (el) {
@@ -2873,7 +2887,7 @@ export default function App() {
                             setLeadForm(prev => ({ ...prev, mensagem: `Desejo receber o relatório técnico detalhado e atualizado com o cronograma completo da obra do ${currentEmpreendimento.nome}.` }));
                             document.getElementById('lead-form-box')?.scrollIntoView({ behavior: 'smooth' });
                           }}
-                          className="w-full flex justify-between items-center bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-900 hover:border-red-955/30 p-4 rounded-xl text-left cursor-pointer transition-all duration-300 group/status-btn"
+                          className="relatorio-tecnico-btn w-full flex justify-between items-center bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-900 hover:border-red-955/30 p-4 rounded-xl text-left cursor-pointer transition-all duration-300 group/status-btn"
                         >
                           <div className="flex flex-col text-left">
                             <span className="text-[9px] uppercase text-zinc-500 font-bold tracking-widest mb-0.5">Memorial Descritivo</span>
@@ -2886,7 +2900,7 @@ export default function App() {
                     </InteractiveTiltCard>
 
                     {/* Right Column: Premium Site Gallery Carousel */}
-                    <div className="lg:col-span-7 rounded-3xl overflow-hidden border border-zinc-900 relative shadow-2xl flex flex-col group/gallery min-h-[480px]">
+                    <div className="status-gallery-card lg:col-span-7 rounded-3xl overflow-hidden border border-zinc-900 relative shadow-2xl flex flex-col group/gallery min-h-[480px]">
                       {/* Dynamic Carousel Slide */}
                       <div className="relative w-full h-full min-h-[480px] bg-zinc-950">
                         {/* Slide image with diamond glass flare effect */}
@@ -2905,7 +2919,7 @@ export default function App() {
 
                         {/* Top corner slide counter */}
                         <div className="absolute top-6 left-6 z-10 select-none">
-                          <span className="bg-zinc-950/80 backdrop-blur-md text-[9px] font-black tracking-widest text-[#d81d00] px-4 py-1.5 rounded-full border border-zinc-900 shadow-xl uppercase">
+                          <span className={`bg-zinc-950/80 backdrop-blur-md text-[9px] font-black tracking-widest ${isLightMode ? 'text-white-forced' : 'text-[#d81d00]'} px-4 py-1.5 rounded-full border border-zinc-900 shadow-xl uppercase`}>
                             Slide {activeProgressPhotoIndex + 1} de 3
                           </span>
                         </div>
@@ -2914,13 +2928,13 @@ export default function App() {
                         <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between items-center z-10">
                           <button
                             onClick={() => setActiveProgressPhotoIndex(prev => prev === 0 ? 2 : prev - 1)}
-                            className="p-3 bg-zinc-950/80 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
+                            className="carousel-nav-btn p-3 bg-zinc-950/80 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
                           >
                             <ChevronLeft size={18} />
                           </button>
                           <button
                             onClick={() => setActiveProgressPhotoIndex(prev => (prev + 1) % 3)}
-                            className="p-3 bg-zinc-950/80 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
+                            className="carousel-nav-btn p-3 bg-zinc-950/80 hover:bg-[#d81d00] hover:text-white text-zinc-400 rounded-full border border-zinc-900 hover:border-red-650 transition-all duration-300 shadow-xl cursor-pointer"
                           >
                             <ChevronRight size={18} />
                           </button>
@@ -2929,7 +2943,7 @@ export default function App() {
                         {/* Bottom slide caption description */}
                         <div className="absolute bottom-6 left-6 right-6 z-10 text-left pointer-events-none select-none">
                           <span className="text-[8px] uppercase tracking-widest text-[#d81d00] font-black mb-1 block">Fotos Reais do Canteiro</span>
-                          <h4 className="text-sm font-bold text-white uppercase tracking-wider leading-snug">
+                          <h4 className="text-sm font-bold text-white-forced uppercase tracking-wider leading-snug">
                             {[
                               'Estrutura em andamento e concretagem das primeiras lajes corporativas.',
                               'Equipe Dubai realizando engenharia de infraestrutura e alvenaria.',
@@ -3019,7 +3033,7 @@ export default function App() {
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.0702956272583!2d-46.83151838502283!3d-23.530026884697387!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf017ad2eb0d79%3A0xe2a8b321eb1d713c!2sAv.%20Marcos%20Penteado%20de%20Ulh%C3%B4a%20Rodrigues%2C%201119%20-%20Tambor%C3%A9%2C%20Barueri%20-%20SP%2C%2006460-040!5e0!3m2!1spt-BR!2sbr!4v1622329388319!5m2!1spt-BR!2sbr" 
                             width="100%" 
                             height="100%" 
-                            style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)' }} 
+                            style={{ border: 0, filter: isLightMode ? 'none' : 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)' }} 
                             allowFullScreen="" 
                             loading="lazy"
                             title="Mapa de Localização"
@@ -3027,7 +3041,7 @@ export default function App() {
                           ></iframe>
 
                           {/* Floating Google Maps Overlay Tooltip matching the wireframe */}
-                          <div className="absolute top-4 left-4 bg-zinc-950/90 border border-zinc-900 rounded-xl p-4 shadow-[0_20px_40px_rgba(0,0,0,0.85)] max-w-xs md:max-w-sm text-left backdrop-blur-md z-10 transition-transform duration-300 group-hover/map:translate-y-1">
+                          <div className="absolute top-4 left-4 bg-zinc-950 border border-zinc-900 rounded-xl p-4 shadow-[0_20px_40px_rgba(0,0,0,0.85)] max-w-xs md:max-w-sm text-left backdrop-blur-md z-10 transition-transform duration-300 group-hover/map:translate-y-1">
                             <div className="flex justify-between items-start gap-4">
                               <div>
                                 <h5 className="text-xs font-black text-white uppercase tracking-wider mb-1">Office Shopping Tamboré</h5>
@@ -3048,7 +3062,7 @@ export default function App() {
                                 href="https://www.google.com/maps/dir//Av.+Marcos+Penteado+de+Ulh%C3%B4a+Rodrigues,+1119+-+Tambor%C3%A9,+Barueri+-+SP,+06460-040" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="w-9 h-9 bg-red-955/20 border border-red-900/30 text-red-500 hover:bg-[#d81d00] hover:text-white rounded-lg flex items-center justify-center transition-all duration-300 shadow-md cursor-pointer flex-shrink-0"
+                                className={`w-9 h-9 ${isLightMode ? 'bg-red-50 border border-red-200 text-[#d81d00]' : 'bg-red-950/20 border border-red-900/30 text-[#d81d00]'} hover:bg-[#d81d00] hover:text-white rounded-lg flex items-center justify-center transition-all duration-300 shadow-md cursor-pointer flex-shrink-0`}
                               >
                                 <ArrowUpRight size={16} />
                               </a>
@@ -3095,8 +3109,8 @@ export default function App() {
                         className="w-full h-full object-cover opacity-80 group-hover/cta:scale-103 transition-transform duration-[1200ms] ease-out absolute inset-0"
                       />
                       {/* Smooth dark overlay blending the photo into the left column's black background */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/40 to-transparent pointer-events-none hidden md:block"></div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent pointer-events-none md:hidden"></div>
+                      <div className={`absolute inset-0 bg-gradient-to-r ${isLightMode ? 'from-white via-white/40' : 'from-zinc-950 via-zinc-950/40'} to-transparent pointer-events-none hidden md:block`}></div>
+                      <div className={`absolute inset-0 bg-gradient-to-t ${isLightMode ? 'from-white via-white/20' : 'from-zinc-950 via-zinc-950/20'} to-transparent pointer-events-none md:hidden`}></div>
                     </div>
 
                   </div>
@@ -3111,22 +3125,32 @@ export default function App() {
         {/* PÁGINA 4: ENTRE EM CONTATO */}
         {/* ------------------------------------------------------------------------- */}
         {currentPage === 'contato' && (
-          <div className="animate-fade-in-up py-16 px-6 max-w-7xl mx-auto">
-            
-            <div className="text-center mb-12">
-              <span className="text-[#d81d00] text-xs font-bold uppercase tracking-[0.25em] flex items-center justify-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#d81d00] animate-pulse"></span>
-                Canais de Atendimento
-              </span>
-              <h1 className="text-4xl md:text-5xl text-white uppercase font-extrabold tracking-tight">
-                Entre em Contato
-              </h1>
-              <p className="text-sm text-zinc-400 font-light mt-4 max-w-2xl mx-auto leading-relaxed">
-                Queremos ouvir você. Escolha um dos perfis abaixo para obter um atendimento especializado e direcionado para a sua necessidade.
-              </p>
+          <div className="animate-fade-in-up pb-24">
+            {/* The Big Luxury Banner */}
+            <div className="hero-section relative bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border-b border-zinc-900/60 py-32 px-6 overflow-hidden">
+              {/* Ambient premium lights specifically for this banner */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-900 rounded-full blur-[100px]"></div>
+              </div>
+              
+              <div className="max-w-5xl mx-auto text-center relative z-10 pt-8">
+                <span className="text-white-forced text-xs font-bold uppercase tracking-[0.25em] flex items-center justify-center gap-2 mb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#d81d00] animate-pulse"></span>
+                  Canais de Atendimento
+                </span>
+                <h1 className="text-4xl md:text-6xl text-white uppercase font-black leading-[1.1] tracking-wider font-sans mb-4">
+                  Entre em <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-400">
+                    Contato
+                  </span>
+                </h1>
+                <p className="text-sm text-zinc-400 font-light max-w-2xl mx-auto leading-relaxed">
+                  Queremos ouvir você. Escolha um dos perfis abaixo para obter um atendimento especializado e direcionado para a sua necessidade.
+                </p>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto px-6 mt-16 md:mt-20">
               
               {/* Lado Esquerdo - Botões Verticais (Segmentação de Contato do Wireframe) */}
               <div className="lg:col-span-4 flex flex-col gap-3.5 pr-0 lg:pr-4">
@@ -3144,9 +3168,9 @@ export default function App() {
                       setContactSegment(item.id);
                       setFormSubmitted(false);
                     }}
-                    className={`w-full text-left px-6 py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all duration-300 relative select-none flex items-center justify-between border ${
+                    className={`contact-segment-btn w-full text-left px-6 py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all duration-300 relative select-none flex items-center justify-between border ${
                       contactSegment === item.id
-                        ? 'bg-zinc-900 border-[#d81d00] text-white shadow-[0_0_15px_rgba(216,29,0,0.15)]'
+                        ? 'active bg-zinc-900 border-[#d81d00] text-white shadow-[0_0_15px_rgba(216,29,0,0.15)]'
                         : 'bg-zinc-950/40 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-white hover:bg-zinc-900/30'
                     }`}
                   >
@@ -3159,7 +3183,7 @@ export default function App() {
               </div>
 
               {/* Lado Direito - O Container do Formulário Ativo com Moldura Clássica do Wireframe */}
-              <div className="lg:col-span-8 bg-zinc-950/50 backdrop-blur-md border border-zinc-800 p-8 md:p-10 rounded-2xl relative shadow-[0_0_50px_rgba(0,0,0,0.7)] hover:border-zinc-700/80 transition-all duration-500 min-h-[500px] flex flex-col justify-center">
+              <div className="contact-form-card lg:col-span-8 bg-zinc-950/50 backdrop-blur-md border border-zinc-800 p-8 md:p-10 rounded-2xl relative shadow-[0_0_50px_rgba(0,0,0,0.7)] hover:border-zinc-700/80 transition-all duration-500 min-h-[500px] flex flex-col justify-center">
                 <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#d81d00]/70 to-transparent"></div>
                 
                 {formSubmitted ? (
@@ -3205,7 +3229,7 @@ export default function App() {
 
                     {/* CANAL CONFIDENCIAL DISCLAIMER & RADIO BUTTONS */}
                     {contactSegment === 'denuncia' && (
-                      <div className="flex flex-col gap-3 text-xs text-zinc-300 font-light leading-relaxed bg-zinc-900/50 p-4 rounded-xl border border-zinc-800/80 mb-2">
+                      <div className="denuncia-disclaimer-box flex flex-col gap-3 text-xs text-zinc-300 font-light leading-relaxed bg-zinc-900/50 p-4 rounded-xl border border-zinc-800/80 mb-2">
                         <p>
                           Este é um canal confidencial disponível para funcionários, fornecedores, parceiros e clientes, conforme as Leis 14.457/22 e 14.611/23. Utilize este canal para enviar denúncias, reclamações e sugestões.
                         </p>
@@ -3436,11 +3460,11 @@ export default function App() {
                         onClick={() => setPrivacyAgreed(!privacyAgreed)}
                         className="w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-all duration-200 mt-0.5 flex-shrink-0"
                         style={{
-                          borderColor: privacyAgreed ? '#d81d00' : '#ffffff',
+                          borderColor: privacyAgreed ? '#d81d00' : (isLightMode ? '#a0a0a5' : '#ffffff'),
                           backgroundColor: privacyAgreed ? '#d81d00' : 'transparent'
                         }}
                       >
-                        {privacyAgreed && <span className="text-[10px] text-white font-black select-none">✓</span>}
+                        {privacyAgreed && <span className="text-[10px] text-white-forced font-black select-none">✓</span>}
                       </div>
                       <input 
                         type="checkbox" 
@@ -3461,11 +3485,11 @@ export default function App() {
                         onClick={() => setCommAgreed(!commAgreed)}
                         className="w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-all duration-200 mt-0.5 flex-shrink-0"
                         style={{
-                          borderColor: commAgreed ? '#d81d00' : '#ffffff',
+                          borderColor: commAgreed ? '#d81d00' : (isLightMode ? '#a0a0a5' : '#ffffff'),
                           backgroundColor: commAgreed ? '#d81d00' : 'transparent'
                         }}
                       >
-                        {commAgreed && <span className="text-[10px] text-white font-black select-none">✓</span>}
+                        {commAgreed && <span className="text-[10px] text-white-forced font-black select-none">✓</span>}
                       </div>
                       <input 
                         type="checkbox" 
@@ -3482,7 +3506,7 @@ export default function App() {
 
                     <button 
                       type="submit" 
-                      className="w-full mt-4 bg-[#d81d00] hover:bg-[#d81d00]/90 text-white font-bold text-xs uppercase tracking-[0.25em] py-4 rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(216,29,0,0.3)] select-none"
+                      className="w-full mt-4 bg-[#d81d00] hover:bg-[#d81d00]/90 text-white-forced font-bold text-xs uppercase tracking-[0.25em] py-4 rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(216,29,0,0.3)] select-none"
                     >
                       Enviar
                     </button>
@@ -3526,7 +3550,7 @@ export default function App() {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.0494488346065!2d-46.837330523824424!3d-23.49472305929654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf01f7871b6923%3A0xc0eb77926b484de!2sAv.%20Marcos%20Penteado%20de%20Ulh%C3%B4a%20Rodrigues%2C%201119%20-%20Tambor%C3%A9%2C%20Barueri%20-%20SP%2C%2006460-040!5e0!3m2!1spt-BR!2sbr!4v1717000000000!5m2!1spt-BR!2sbr"
                   width="100%" 
                   height="100%" 
-                  style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)' }} 
+                  style={{ border: 0, filter: isLightMode ? 'none' : 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)' }} 
                   allowFullScreen="" 
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
@@ -3538,7 +3562,7 @@ export default function App() {
                   href="https://maps.google.com/?q=Av.+Marcos+Penteado+de+Ulhôa+Rodrigues,+1119+-+Tamboré,+Barueri+-+SP,+06460-040"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute top-4 left-4 bg-zinc-950/90 text-white border border-zinc-800 hover:border-[#d81d00]/40 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 hover:shadow-[0_0_15px_rgba(216,29,0,0.25)] select-none flex items-center gap-2"
+                  className="map-floating-btn absolute top-4 left-4 bg-zinc-950/90 text-white-forced border border-zinc-800 hover:border-[#d81d00]/40 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all duration-300 hover:shadow-[0_0_15px_rgba(216,29,0,0.25)] select-none flex items-center gap-2"
                 >
                   <MapPin size={10} className="text-[#d81d00]" />
                   Open in Maps
@@ -3552,14 +3576,14 @@ export default function App() {
 
       <footer className="bg-black/95 border-t border-zinc-950 pt-20 pb-0 px-6 text-zinc-400 text-xs relative overflow-hidden pattern-bg">
         {/* Elemento de iluminação neon no topo central (Estilo Efferd/SaaS) */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-950/10 rounded-full blur-[160px] pointer-events-none"></div>
+        <div className="footer-glow absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-950/10 rounded-full blur-[160px] pointer-events-none"></div>
         
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 relative z-10">
           
           {/* Coluna Esquerda (Logo, Slogan, Redes Sociais, Contato) */}
           <div className="lg:col-span-7 flex flex-col items-start gap-5">
             <img 
-              src={`${import.meta.env.BASE_URL}logo.svg`} 
+              src={`${import.meta.env.BASE_URL}${isLightMode ? 'logo-dark.svg' : 'logo.svg'}`} 
               alt="Dubai Incorporação e Construção" 
               className="h-10 w-auto cursor-pointer mb-2" 
               onClick={() => {
@@ -3576,14 +3600,14 @@ export default function App() {
             
             {/* Ícones de Redes Sociais Circulares */}
             <div className="flex gap-3 pt-2">
-              <a href="#" className="w-8 h-8 rounded-full border border-zinc-900 bg-zinc-950/40 text-zinc-500 hover:text-white hover:border-red-800 flex items-center justify-center transition-all duration-300">
-                <span className="text-[10px] font-bold">T</span>
+              <a href="#" className="social-link-btn w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" title="Instagram">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
-              <a href="#" className="w-8 h-8 rounded-full border border-zinc-900 bg-zinc-950/40 text-zinc-500 hover:text-white hover:border-red-800 flex items-center justify-center transition-all duration-300">
-                <span className="text-[10px] font-bold">F</span>
+              <a href="#" className="social-link-btn w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" title="Facebook">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
               </a>
-              <a href="#" className="w-8 h-8 rounded-full border border-zinc-900 bg-zinc-950/40 text-zinc-500 hover:text-white hover:border-red-800 flex items-center justify-center transition-all duration-300">
-                <span className="text-[10px] font-bold">In</span>
+              <a href="#" className="social-link-btn w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" title="LinkedIn">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
               </a>
             </div>
             
@@ -3636,7 +3660,7 @@ export default function App() {
 
 
         {/* Copyright strip */}
-        <div className="border-t border-zinc-900/60 py-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-[10px] text-zinc-500 gap-4 relative z-10 bg-transparent">
+        <div className="border-t border-zinc-900/10 py-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-[10px] text-zinc-500 gap-4 relative z-10 bg-transparent">
           <p 
             onClick={() => {
               setCurrentPage('home2');
@@ -3650,7 +3674,7 @@ export default function App() {
         </div>
 
         {/* Créditos obrigatórios da New Humans */}
-        <div className="bg-black/90 border-t border-zinc-950 py-4 px-6 text-center text-[9px] text-zinc-600 -mx-6 relative z-10">
+        <div className="bg-black/90 py-4 px-6 text-center text-[9px] text-zinc-600 -mx-6 relative z-10">
           Criação e Desenvolvimento New Humans | Plataforma Add Suite - Tecnologia e Comunicação para Transformação Digital
         </div>
       </footer>
@@ -3659,6 +3683,23 @@ export default function App() {
       {/* 2 BOTÕES FLUTUANTES DE CONTATO PREMIUM & LUXUOSOS (Fidelidade ao Tema Dubai) */}
       {/* ========================================================================= */}
       <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end">
+        {/* Botão 3: Rotação de Raciocínio de Cor (Visão Diurna / Visão Noturna) */}
+        <button 
+          onClick={() => setIsLightMode(!isLightMode)}
+          className="w-14 h-14 bg-zinc-950/90 backdrop-blur-md rounded-full border border-zinc-900 flex items-center justify-center text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 hover:shadow-[0_0_25px_rgba(216,29,0,0.25)] transition-all duration-300 group shadow-2xl relative"
+          title={isLightMode ? "Visão Noturna" : "Visão Diurna"}
+        >
+          {/* Tooltip elegante em Gilroy */}
+          <span className="absolute right-16 bg-zinc-950/95 backdrop-blur-md border border-zinc-900 text-white text-[9px] tracking-[0.2em] uppercase font-bold px-3.5 py-2 rounded-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-xl transform translate-x-2 group-hover:translate-x-0 font-sans">
+            {isLightMode ? "Visão Noturna" : "Visão Diurna"}
+          </span>
+          {isLightMode ? (
+            <Moon size={20} className="text-[#d81d00] group-hover:scale-110 transition-transform duration-300" />
+          ) : (
+            <Sun size={20} className="text-[#d81d00] group-hover:scale-110 transition-transform duration-300" />
+          )}
+        </button>
+
         {/* Botão 1: Enviar Mensagem (Abre Formulário de Lead ou Rola até a Seção) */}
         <button 
           onClick={() => {
