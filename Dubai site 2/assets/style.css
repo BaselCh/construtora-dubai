@@ -100,9 +100,9 @@ div[class*="glass-panel"]::after {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.01) 20%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0.01) 80%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
     transparent 100%
   );
   transform: skewX(-25deg);
@@ -553,11 +553,9 @@ section.reveal-visible button {
 /* --------------------------------------------------------- */
 /* SPECIFIC HERO & MENU (HEADER) TOTAL DARK THEME RETENTION  */
 /* --------------------------------------------------------- */
-/* Prevent light-mode style overrides inside the Header, Mobile Menu and Hero section */
+/* Prevent light-mode style overrides inside the Header and Hero section */
 .light-mode header:not(.header-light),
 .light-mode header:not(.header-light) *,
-.light-mode #mobile-menu,
-.light-mode #mobile-menu *,
 .light-mode .hero-section,
 .light-mode .hero-section * {
   color: unset;
@@ -566,26 +564,20 @@ section.reveal-visible button {
 .hero-section {
   background-color: #080809 !important;
 }
-/* Header and Mobile Menu Text, Links, and Buttons */
+/* Header Text, Links, and Buttons */
 .light-mode header:not(.header-light) .text-white,
 .light-mode header:not(.header-light) a,
 .light-mode header:not(.header-light) button.text-white,
-.light-mode header:not(.header-light) a.text-white,
-.light-mode #mobile-menu .text-white,
-.light-mode #mobile-menu button.text-white,
-.light-mode #mobile-menu a {
+.light-mode header:not(.header-light) a.text-white {
   color: #ffffff !important;
 }
 
 .light-mode header:not(.header-light) .text-zinc-400,
-.light-mode header:not(.header-light) button:not(.text-white),
-.light-mode #mobile-menu .text-zinc-400,
-.light-mode #mobile-menu button:not(.text-white) {
+.light-mode header:not(.header-light) button:not(.text-white) {
   color: #a0a0a5 !important;
 }
 
-.light-mode header:not(.header-light) svg path,
-.light-mode #mobile-menu svg path {
+.light-mode header:not(.header-light) svg path {
   stroke: #ffffff !important;
 }
 
@@ -1284,43 +1276,27 @@ section.reveal-visible button {
   stroke: #ffffff !important;
 }
 
-/* Insights Bento Grid light mode fixes */
-.light-mode .insights-bento-card h2.text-white.bento-text-white,
-.light-mode .insights-bento-card h3.text-white.bento-text-white,
-.light-mode .bento-text-white {
+.light-mode .concept-video-card h3,
+.light-mode .concept-video-card span,
+.light-mode .concept-video-card p,
+.light-mode .concept-video-card svg {
   color: #ffffff !important;
 }
-.light-mode .insights-bento-card p.text-zinc-300.bento-text-zinc-300,
-.light-mode .bento-text-zinc-300 {
-  color: #d4d4d8 !important;
+.light-mode .concept-video-card .text-zinc-400 {
+  color: #a1a1aa !important;
 }
-.light-mode .insights-bento-card span.text-zinc-400.bento-text-zinc-400,
-.light-mode .bento-text-zinc-400 {
-  color: #a0a0a5 !important;
+.light-mode .concept-video-card .text-zinc-500 {
+  color: #71717a !important;
 }
 
-/* Background elegant grid pattern */
-.pattern-grid {
-  background-image: 
-    linear-gradient(rgba(128, 128, 128, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(128, 128, 128, 0.07) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: center;
+/* Day mode stat numbers visibility fix */
+.light-mode .stat-number-gradient {
+  background-image: linear-gradient(135deg, #09090b 0%, #27272a 50%, #52525b 100%) !important;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
 }
 
-.light-mode .pattern-grid {
-  background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-}
 
-/* Forced styles to prevent light-mode overrides on overlays */
-.bg-black-forced-40 {
-  background-color: rgba(0, 0, 0, 0.4) !important;
-}
-.bg-white-forced {
-  background-color: #ffffff !important;
-}
-.text-black-forced {
-  color: #000000 !important;
-}
+
+

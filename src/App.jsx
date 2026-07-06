@@ -14,6 +14,7 @@ import {
   Award, 
   Clock, 
   ArrowRight, 
+  ArrowLeft,
   Filter, 
   Search,
   MessageSquare,
@@ -466,11 +467,127 @@ function InteractiveTiltCard({ children, className, onClick, ...props }) {
   );
 }
 
+const INSIGHTS_ARTICLES = [
+  {
+    id: 'feat-1',
+    category: 'Inspiração',
+    date: '16/01/2022',
+    time: 'há 4 horas',
+    title: 'Luxo e elegância, até onde o Design minimalista pode nos levar?',
+    desc: 'Para aproveitar todo o charme e elegância do dourado, separamos nesse post dicas para você. Confira a seguir como decorar com dourado.',
+    content: 'A Pantone anunciou duas cores para marcar 2021: Ultimate Gray e Illuminating. Mais do que dois nomes bonitos para o cinza e o amarelo, as cores do ano trazem todo um significado. Segundo Nick Bazarian, gerente de produto sênior para negócios digitais da Pantone, “a cor do ano é muito uma declaração de como o mundo está se sentindo".',
+    highlightQuote: 'Segundo Nick Bazarian, gerente de produto sênior para negócios digitais da Pantone, “a cor do ano é muito uma declaração de como o mundo está se sentindo".',
+    subtitle: 'Tendências para 2022',
+    content2: 'O ambiente onde a criança vive integra um dos seis pilares da metodologia montessoriana (autoeducação, educação como ciência, educação cósmica, ambiente preparado e adulto preparado). O chamado “ambiente preparado” é um espaço construído especialmente para os pequenos, com mobília de tamanho adequado e materiais de desenvolvimento para a livre utilização, atendendo às suas necessidades biológicas e psicológicas.',
+    img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'feat-2',
+    category: 'Inspiração',
+    date: '16/01/2022',
+    time: 'há 4 horas',
+    title: 'Design integrado: a união entre praticidade, sofisticação e áreas gourmet',
+    desc: 'Salas de estar com conceito aberto e integração total entre ambientes sociais e cozinha gourmet.',
+    content: 'Integrar a cozinha gourmet com a sala de estar e a varanda é a melhor forma de ampliar os ambientes de convivência familiar. No desenvolvimento dos empreendimentos Dubai, priorizamos plantas flexíveis que permitem essa integração fluida. Com grandes vãos livres, portas de vidro deslizantes do teto ao chão e o mesmo revestimento de porcelanato premium em toda a área social, a sensação de amplitude é multiplicada. Isso permite criar recepções intimistas ou simplesmente desfrutar de um final de tarde ensolarado enquanto prepara uma refeição especial em família.',
+    img: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'feat-3',
+    category: 'Inspiração',
+    date: '16/01/2022',
+    time: 'há 4 horas',
+    title: 'O novo Home Office de luxo: produtividade, conforto e tecnologia',
+    desc: 'Tendências de escritórios em casa (Home Office) de luxo combinando funcionalidade, tecnologia e sofisticação.',
+    content: 'O home office se consolidou como um dos espaços mais importantes em qualquer residência de alto padrão. Não basta ser apenas um escritório improvisado; ele precisa refletir a personalidade e o profissionalismo do morador, com total ergonomia e elegância. Apostar em paletas de cores mais escuras, como tons de chumbo e cinza profundo, combinados com iluminação em fitas de LED embutidas nas estantes e móveis planejados sob medida, cria uma atmosfera de concentração e prestígio. A acústica refinada e a conectividade veloz, planejadas desde a estrutura da obra, são diferenciais indispensáveis.',
+    img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'see-1',
+    category: 'Institucional',
+    title: 'Monte uma sala de TV confortável e elegante para momentos em família',
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum adipiscing elit.',
+    content: 'Uma sala de TV perfeita exige o equilíbrio exato entre acústica, conforto de assentos e controle de iluminação. Descubra como projetar um painel de madeira elegante, escolher o sofá retrátil perfeito e utilizar sistemas de automação de iluminação para transformar sua sala de estar em uma verdadeira sala de cinema privativa.',
+    link: 'Consectetur adipiscing aenean .',
+    img: 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    id: 'see-2',
+    category: 'Mercado',
+    title: 'Valorização do metro quadrado de alto padrão nas regiões nobres de Osasco',
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum adipiscing elit.',
+    content: 'O mercado imobiliário de luxo em Osasco e Barueri (particularmente em Alphaville) continua registrando taxas recordes de valorização. Investidores buscam segurança patrimonial e qualidade de vida, preferindo empreendimentos que entregam diferenciais tecnológicos e acabamento premium desde a fundação.',
+    link: 'Consectetur adipiscing aenean .',
+    img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    id: 'see-3',
+    category: 'Tecnologia e inovação',
+    title: 'Sistemas de automação residencial e inteligência artificial no dia a dia',
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum adipiscing elit.',
+    content: 'Comandar ar condicionado, persianas, cortinas, som ambiente e fechaduras eletrônicas por comandos de voz ou por aplicativo no celular já é uma realidade nativa nos nossos projetos. A infraestrutura de cabeamento estruturado e pontos de automação são instalados em todas as suítes e áreas comuns.',
+    link: 'Consectetur adipiscing aenean .',
+    img: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    id: 'see-4',
+    category: 'Sustentabilidade',
+    title: 'Uso de energia fotovoltaica e reuso de água em condomínios de alto padrão',
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum adipiscing elit.',
+    content: 'Os novos empreendimentos da Dubai contam com painéis de energia solar nas coberturas para alimentar as áreas sociais, além de sistemas avançados de filtragem e reuso de água da chuva para irrigação de jardins. O luxo e a consciência ecológica andam juntos.',
+    link: 'Consectetur adipiscing aenean .',
+    img: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    id: 'see-5',
+    category: 'Mercado',
+    title: 'Como escolher o imóvel de luxo perfeito para morar ou investir',
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum adipiscing elit.',
+    content: 'Na hora de escolher um imóvel premium, a qualidade do acabamento é o fator determinante. Verificar a solidez das portas, marcas de louças e metais sanitários, a espessura das janelas com isolamento acústico e a qualidade das áreas comuns garante um investimento duradouro e com alto retorno de revenda.',
+    link: 'Consectetur adipiscing aenean .',
+    img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    id: 'see-6',
+    category: 'Institucional',
+    title: 'Dubai comemora 100% de entregas rigorosamente dentro do prazo contratual',
+    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum adipiscing elit.',
+    content: 'Entregar um imóvel no prazo é compromisso inegociável na Dubai Construtora. Nossas equipes trabalham com cronogramas integrados de alta precisão e parcerias consolidadas com fornecedores homologados de primeira linha, garantindo a tranquilidade das famílias na transição para o novo lar.',
+    link: 'Consectetur adipiscing aenean .',
+    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=500&q=80'
+  }
+];
+
 export default function App() {
   const backgroundLayerRef = React.useRef(null);
+  const isFirstRender = React.useRef(true);
   // Roteador baseado em Estado: 'home' | 'empreendimentos' | 'detalhe' | 'contato'
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] = useState('authoria');
+  const [currentPage, setCurrentPage] = useState(() => {
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    if (hash === '#home2') return 'home2';
+    if (hash === '#empreendimentos') return 'empreendimentos';
+    if (hash === '#quem-somos') return 'quem-somos';
+    if (hash === '#contato') return 'contato';
+    if (hash === '#insights') return 'insights';
+    if (hash === '#politicas-privacidade' || hash === '#politicas_de_privacidade') return 'politicas-privacidade';
+    if (hash === '#termos-uso' || hash === '#termos_e_condi_oes_de_uso') return 'termos-uso';
+    if (hash.startsWith('#detalhes-noticia')) return 'detalhes-noticia';
+    if (hash.startsWith('#detalhe/')) return 'detalhe';
+    return 'home';
+  });
+  const [selectedEmpreendimentoId, setSelectedEmpreendimentoId] = useState(() => {
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    if (hash.startsWith('#detalhe/')) {
+      return hash.replace('#detalhe/', '');
+    }
+    return 'authoria';
+  });
+  const [historySlide, setHistorySlide] = useState(0);
+  // States for the new Insights page
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [insightsSearchQuery, setInsightsSearchQuery] = useState('');
+  const [searchInputValue, setSearchInputValue] = useState('');
+  const [insightsPageNumber, setInsightsPageNumber] = useState(1);
+  const [selectedArticle, setSelectedArticle] = useState(null);
   const [isSpotlightActive, setIsSpotlightActive] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [isLightMode, setIsLightMode] = useState(() => {
@@ -494,7 +611,7 @@ export default function App() {
   const [contactSegment, setContactSegment] = useState('cliente'); // 'cliente' | 'vizinho' | 'fornecedor' | 'corretor' | 'trabalhar' | 'denuncia'
   const [desejaIdentificar, setDesejaIdentificar] = useState(false);
 
-  const isHeaderLight = isLightMode && (scrollY > 20 || currentPage === 'detalhe' || currentPage === 'contato');
+  const isHeaderLight = isLightMode && (scrollY > 20 || currentPage === 'detalhe' || currentPage === 'contato' || currentPage === 'insights' || currentPage === 'detalhes-noticia' || currentPage === 'politicas-privacidade' || currentPage === 'termos-uso');
 
   // Estados para busca inteligente global
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -664,8 +781,34 @@ export default function App() {
         setCurrentPage('home2');
       } else if (hash === '#empreendimentos') {
         setCurrentPage('empreendimentos');
+      } else if (hash === '#quem-somos') {
+        setCurrentPage('quem-somos');
       } else if (hash === '#contato') {
         setCurrentPage('contato');
+      } else if (hash === '#insights') {
+        setCurrentPage('insights');
+      } else if (hash === '#politicas-privacidade' || hash === '#politicas_de_privacidade') {
+        setCurrentPage('politicas-privacidade');
+      } else if (hash === '#termos-uso' || hash === '#termos_e_condi_oes_de_uso') {
+        setCurrentPage('termos-uso');
+      } else if (hash.startsWith('#sub-') || hash === '#politica' || hash === '#termos') {
+        // Ignorar redirecionamento de página para não resetar quando usar âncoras internas
+        const targetId = hash.replace('#', '');
+        setTimeout(() => {
+          const element = document.getElementById(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else if (hash.startsWith('#detalhes-noticia')) {
+        const id = hash.replace('#detalhes-noticia/', '').replace('#detalhes-noticia', '');
+        const article = INSIGHTS_ARTICLES.find(p => p.id === id);
+        if (article) {
+          setSelectedArticle(article);
+        } else if (!selectedArticle) {
+          setSelectedArticle(INSIGHTS_ARTICLES[0]);
+        }
+        setCurrentPage('detalhes-noticia');
       } else if (hash.startsWith('#detalhe/')) {
         const id = hash.replace('#detalhe/', '');
         const exists = empreendimentosData.some(e => e.id === id);
@@ -679,7 +822,6 @@ export default function App() {
         setCurrentPage('home');
       }
     };
-
     // Executar no carregamento inicial
     handleHashChange();
 
@@ -705,17 +847,36 @@ export default function App() {
     } else if (currentPage === 'contato') {
       targetHash = 'contato';
       title = 'Entre em Contato | Dubai Construtora';
+    } else if (currentPage === 'quem-somos') {
+      targetHash = 'quem-somos';
+      title = 'Quem Somos | Dubai Construtora';
+    } else if (currentPage === 'insights') {
+      targetHash = 'insights';
+      title = 'Insights | Dubai Construtora';
+    } else if (currentPage === 'politicas-privacidade') {
+      targetHash = window.location.hash === '#politicas_de_privacidade' ? 'politicas_de_privacidade' : 'politicas-privacidade';
+      title = 'Políticas de Privacidade | Dubai Construtora';
+    } else if (currentPage === 'termos-uso') {
+      targetHash = window.location.hash === '#termos_e_condi_oes_de_uso' ? 'termos_e_condi_oes_de_uso' : 'termos-uso';
+      title = 'Termos e Condições de Uso | Dubai Construtora';
+    } else if (currentPage === 'detalhes-noticia') {
+      targetHash = selectedArticle ? `detalhes-noticia/${selectedArticle.id}` : 'detalhes-noticia';
+      title = selectedArticle ? `${selectedArticle.title} | Dubai Construtora` : 'Notícia | Dubai Construtora';
     } else if (currentPage === 'detalhe') {
       const current = empreendimentosData.find(e => e.id === selectedEmpreendimentoId) || empreendimentosData[0];
       targetHash = `detalhe/${selectedEmpreendimentoId}`;
       title = `${current.nome} | Dubai Construtora`;
     }
 
-    if (window.location.hash !== `#${targetHash}`) {
-      window.location.hash = targetHash;
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      if (window.location.hash !== `#${targetHash}`) {
+        window.location.hash = targetHash;
+      }
     }
     document.title = title;
-  }, [currentPage, selectedEmpreendimentoId]);
+  }, [currentPage, selectedEmpreendimentoId, selectedArticle]);
 
   // Sincronizar o interesse do lead com o empreendimento selecionado
   useEffect(() => {
@@ -928,10 +1089,15 @@ export default function App() {
         }}
       ></div>
 
-      {/* Dramatic Ambient Dim Overlay when Spotlight is active and scrolled past the Hero section - ACTIVE ONLY ON DESKTOP       {/* ========================================================================= */}
+      {/* Dramatic Ambient Dim Overlay when Spotlight is active and scrolled past the Hero section - ACTIVE ONLY ON DESKTOP */}
+      <div 
+        className={`hidden md:block fixed inset-0 bg-black/60 transition-opacity duration-700 pointer-events-none z-10 ${(isSpotlightActive && scrollY > 400) ? 'opacity-100' : 'opacity-0'}`}
+      ></div>
+
+      {/* ========================================================================= */}
       {/* HEADER GLOBAL - Layout Centralizado & Menu Dinâmico do Wireframe */}
       {/* ========================================================================= */}
-      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrollY > 20 || currentPage === 'detalhe' ? 'glass-panel border-b border-zinc-955 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isHeaderLight ? 'header-light' : ''} ${scrollY > 20 || currentPage === 'detalhe' || currentPage === 'insights' || currentPage === 'detalhes-noticia' || currentPage === 'politicas-privacidade' || currentPage === 'termos-uso' ? 'glass-panel border-b border-zinc-955 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
           {/* Lado Esquerdo: Menu hambúrguer interativo + Links horizontais no estado Aberto */}
@@ -981,7 +1147,7 @@ export default function App() {
                   >
                     Home
                   </button>
-
+ 
                   <button 
                     onClick={() => { setCurrentPage('empreendimentos'); setIsMenuOpen(false); }}
                     className={`text-sm font-bold tracking-wide transition-colors ${currentPage === 'empreendimentos' ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}`}
@@ -990,19 +1156,17 @@ export default function App() {
                   </button>
                   <button 
                     onClick={() => { 
-                      setCurrentPage('home'); 
+                      setCurrentPage('quem-somos'); 
                       setIsMenuOpen(false);
-                      setTimeout(() => {
-                        document.getElementById('sobre-nos-secao')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
+                      window.scrollTo({ top: 0, behavior: 'instant' });
                     }}
-                    className="text-sm font-bold tracking-wide text-zinc-400 hover:text-white transition-colors"
+                    className={`text-sm font-bold tracking-wide transition-colors ${currentPage === 'quem-somos' ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}`}
                   >
                     Quem somos
                   </button>
                   <button 
-                    onClick={() => { setCurrentPage('home'); setIsMenuOpen(false); }}
-                    className="text-sm font-bold tracking-wide text-zinc-400 hover:text-white transition-colors"
+                    onClick={() => { setCurrentPage('insights'); setIsMenuOpen(false); }}
+                    className={`text-sm font-bold tracking-wide transition-colors ${(currentPage === 'insights' || currentPage === 'detalhes-noticia') ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}`}
                   >
                     Insights
                   </button>
@@ -1010,14 +1174,14 @@ export default function App() {
               </div>
             )}
           </div>
-
+ 
           {/* Centro: Logotipo Dubai Centralizado (Carregando o SVG Oficial) */}
           <div 
             onClick={() => setCurrentPage('home')}
             className="absolute left-1/2 transform -translate-x-1/2 flex items-center cursor-pointer h-12"
           >
             <img 
-              src={`${import.meta.env.BASE_URL}logo.svg`} 
+              src={`${import.meta.env.BASE_URL}${isHeaderLight ? 'logo-dark.svg' : 'logo.svg'}`} 
               alt="Dubai Incorporação e Construção" 
               className="h-9 md:h-11 w-auto" 
             />
@@ -1041,8 +1205,8 @@ export default function App() {
       {/* ========================================================================= */}
       {/* DRAWER DE MENU MOBILE FULL-SCREEN (Luxo, Legibilidade e Fluidez em Telas Menores) */}
       {/* ========================================================================= */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden bg-black/95 backdrop-blur-2xl flex flex-col justify-between pt-28 pb-12 px-6 animate-fade-in-up">
+      {true && (
+        <div id="mobile-menu" className={`fixed inset-0 z-40 md:hidden bg-black/95 backdrop-blur-2xl flex flex-col justify-between pt-28 pb-12 px-6 ${isMenuOpen ? 'animate-fade-in-up' : 'hidden'}`}>
           <div className="flex flex-col gap-8 mt-12 text-left">
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-zinc-500 border-b border-zinc-900 pb-2">
               Navegação Dubai
@@ -1063,19 +1227,17 @@ export default function App() {
               </button>
               <button 
                 onClick={() => { 
-                  setCurrentPage('home'); 
+                  setCurrentPage('quem-somos'); 
                   setIsMenuOpen(false);
-                  setTimeout(() => {
-                    document.getElementById('sobre-nos-secao')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
+                  window.scrollTo({ top: 0, behavior: 'instant' });
                 }}
-                className="text-2xl font-bold uppercase tracking-wider text-left text-white hover:text-red-500 transition-colors"
+                className={`text-2xl font-bold uppercase tracking-wider text-left transition-colors ${currentPage === 'quem-somos' ? 'text-red-500' : 'text-white hover:text-red-500'}`}
               >
                 Quem somos
               </button>
               <button 
-                onClick={() => { setCurrentPage('home'); setIsMenuOpen(false); }}
-                className="text-2xl font-bold uppercase tracking-wider text-left text-white hover:text-red-500 transition-colors"
+                onClick={() => { setCurrentPage('insights'); setIsMenuOpen(false); }}
+                className={`text-2xl font-bold uppercase tracking-wider text-left transition-colors ${(currentPage === 'insights' || currentPage === 'detalhes-noticia') ? 'text-red-500' : 'text-white hover:text-red-500'}`}
               >
                 Insights
               </button>
@@ -1104,8 +1266,8 @@ export default function App() {
       {/* ========================================================================= */}
       {/* OVERLAY DE BUSCA MINIMALISTA E IMERSIVA (Para Desktop e Mobile) */}
       {/* ========================================================================= */}
-      {isSearchOpen && (
-        <div className="search-overlay fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-center items-center p-6 animate-fade-in-up">
+      {true && (
+        <div id="search-overlay" className={`search-overlay fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-center items-center p-6 ${isSearchOpen ? 'animate-fade-in-up' : 'hidden'}`}>
           <div className="max-w-2xl w-full flex flex-col gap-6 text-center">
             {/* Safe, non-overlapping Close Button centered perfectly at the top of the layout flow */}
             <button 
@@ -1197,7 +1359,7 @@ export default function App() {
       )}
 
       {/* Espaçador de Cabeçalho - Exclui páginas que têm seus próprios heros integrados */}
-      {currentPage !== 'home' && currentPage !== 'home2' && currentPage !== 'empreendimentos' && currentPage !== 'detalhe' && currentPage !== 'contato' && <div className="h-20"></div>}
+      {currentPage !== 'home' && currentPage !== 'home2' && currentPage !== 'empreendimentos' && currentPage !== 'detalhe' && currentPage !== 'contato' && currentPage !== 'insights' && <div className="h-20"></div>}
 
       {/* ========================================================================= */}
       {/* CONTEÚDO PRINCIPAL - Sistema de Rotas */}
@@ -3572,6 +3734,1240 @@ export default function App() {
 
           </div>
         )}
+
+        {/* ------------------------------------------------------------------------- */}
+        {/* PÁGINA 5: QUEM SOMOS */}
+        {/* ------------------------------------------------------------------------- */}
+        {currentPage === 'quem-somos' && (
+          <div className="animate-fade-in-up pb-24">
+            
+            {/* Banner superior com foto colorida de colaboração/trabalho em equipe */}
+            <div className="hero-section relative min-h-[45vh] lg:min-h-[55vh] flex items-center py-20 px-6 overflow-hidden">
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80" 
+                  alt="Dubai Colaboração e Trabalho em Equipe" 
+                  className="w-full h-full object-cover opacity-50 scale-102"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-black/50"></div>
+                <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-red-900/10 rounded-full blur-[130px] pointer-events-none"></div>
+              </div>
+
+              <div className="relative z-10 max-w-7xl mx-auto w-full text-center pt-8">
+                <span className="text-white-forced text-xs font-bold uppercase tracking-[0.25em] flex items-center justify-center gap-2 mb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#d81d00] animate-pulse"></span>
+                  Institucional
+                </span>
+                <h1 className="text-4xl md:text-6xl text-white-forced uppercase font-black leading-[1.1] tracking-wider font-sans mb-4">
+                  Quem Somos
+                </h1>
+                <p className="text-sm text-zinc-400 font-light max-w-2xl mx-auto leading-relaxed text-white-forced opacity-90">
+                  Conheça a nossa história, nossos valores e o compromisso da Construtora Dubai com a excelência.
+                </p>
+              </div>
+            </div>
+
+            {/* Layout principal do conteúdo */}
+            <div className="max-w-7xl mx-auto px-6 mt-16 md:mt-24 space-y-28">
+              
+              {/* Seção 1: Quem Somos Intro Split */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                {/* Lado Esquerdo: Título e Textos Exatos da Imagem */}
+                <div className="lg:col-span-7 text-left space-y-6">
+                  <h2 className={`text-3xl md:text-4xl font-extrabold uppercase tracking-tight ${isLightMode ? 'text-zinc-950' : 'text-white'} mb-6`}>
+                    QUEM SOMOS
+                  </h2>
+                  <div className="w-16 h-[2px] bg-[#d81d00] mb-8"></div>
+                  <p className="text-base text-zinc-400 font-light leading-relaxed">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor.
+                  </p>
+                </div>
+
+                {/* Lado Direito: Imagem colorida premium de edifício contemporâneo */}
+                <div className="lg:col-span-5 w-full">
+                  <InteractiveTiltCard className="glass-panel-hover rounded-3xl overflow-hidden border border-zinc-900/60 shadow-2xl relative group/building aspect-[4/5] max-w-md mx-auto">
+                    <img 
+                      src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80" 
+                      alt="Dubai Arquitetura Corporativa" 
+                      className="w-full h-full object-cover group-hover/building:scale-105 transition-all duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
+                  </InteractiveTiltCard>
+                </div>
+              </div>
+
+              {/* Seção 2: Estatísticas / Números Dubai (Seguindo estilo exato da Home Page) */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-12 px-6 rounded-3xl border border-zinc-900/40 bg-zinc-950/20 backdrop-blur-md">
+                {[
+                  { value: '9', label: 'cidades em todo o Brasil' },
+                  { value: '457', label: 'projetos entregues' },
+                  { value: '+112mil', label: 'pessoas que vivem em um Dubai' },
+                  { value: '+3,1mil', label: 'colaboradores em nossa equipe' }
+                ].map((stat, idx) => (
+                  <div key={idx} className="group relative text-left pl-6">
+                    <div className="absolute left-0 top-0 w-[2px] h-0 bg-red-600 group-hover:h-full transition-all duration-500"></div>
+                    <div>
+                      <div className="text-4xl lg:text-5xl font-extrabold tracking-tight flex items-baseline">
+                        <span className={`stat-number-gradient bg-clip-text text-transparent bg-gradient-to-br ${isLightMode ? 'from-zinc-950 via-zinc-800 to-zinc-600' : 'from-white via-zinc-100 to-zinc-400'} group-hover:to-red-500 transition-colors duration-300`}>
+                          {stat.value}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mt-2 group-hover:text-[#d81d00] transition-colors">
+                        {stat.label}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Seção 3: Missão e Visão */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 py-8 border-t border-zinc-900/40">
+                <div className="lg:col-span-4 text-left">
+                  <h3 className={`text-2xl font-black uppercase tracking-wider ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                    Nossa Missão e Nossa Visão
+                  </h3>
+                  <div className="w-12 h-[2px] bg-[#d81d00] mt-4"></div>
+                </div>
+                <div className="lg:col-span-8 text-left space-y-6">
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-red-500 mb-2">Missão</h4>
+                    <p className={`text-lg font-medium ${isLightMode ? 'text-zinc-800' : 'text-zinc-200'} leading-relaxed`}>
+                      "Transformar o jeito de viver."
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-red-500 mb-2">Visão</h4>
+                    <p className="text-base text-zinc-400 font-light leading-relaxed">
+                      "Impactar a sociedade respeitando os pilares social, ambiental e econômico, construindo um legacy transformador, através do compromisso com os seus clientes e valorização dos seus colaboradores."
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Seção 4: Nossos Valores */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center border-t border-zinc-900/40 pt-16">
+                {/* Lado Esquerdo: Imagem */}
+                <div className="lg:col-span-5 w-full">
+                  <InteractiveTiltCard className="glass-panel-hover rounded-3xl overflow-hidden border border-zinc-900/60 shadow-2xl relative group/values aspect-[4/5] max-w-md mx-auto">
+                    <img 
+                      src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" 
+                      alt="Dubai Valores" 
+                      className="w-full h-full object-cover group-hover/values:scale-105 transition-all duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
+                  </InteractiveTiltCard>
+                </div>
+                {/* Lado Direito: Detalhes */}
+                <div className="lg:col-span-7 text-left space-y-8">
+                  <div>
+                    <h3 className={`text-3xl font-extrabold uppercase tracking-tight ${isLightMode ? 'text-zinc-950' : 'text-white'} mb-6`}>
+                      Nossos Valores
+                    </h3>
+                    <div className="w-16 h-[2px] bg-[#d81d00] mb-8"></div>
+                    <div className="mb-6">
+                      <span className="text-xs font-bold text-red-500 uppercase tracking-widest block mb-1">DNA</span>
+                      <p className={`text-lg font-semibold ${isLightMode ? 'text-zinc-800' : 'text-zinc-200'}`}>
+                        "Somos apaixonados pelo que fazemos e surpreender é o que nos motiva."
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      { title: 'Segurança', desc: 'Ambiente de trabalho seguro e saudável, uma responsabilidade de todos.', icon: ShieldCheck },
+                      { title: 'Clientes', desc: 'Nossa razão de ser.', icon: MessageSquare },
+                      { title: 'Padrão Dubai', desc: 'Qualidade, compromisso e relacionamento.', icon: Award },
+                      { title: 'Assertividade', desc: 'Desenvolvemos os melhores produtos com inovação, qualidade e valor agregado.', icon: Sparkles }
+                    ].map((val, idx) => {
+                      const Icon = val.icon;
+                      return (
+                        <InteractiveTiltCard key={idx} className="glass-panel-hover p-6 rounded relative group overflow-hidden border-zinc-900 hover:border-red-900/50 transition-all duration-300">
+                          <div className="w-8 h-8 rounded bg-zinc-950 flex items-center justify-center text-red-500 mb-4 group-hover:scale-110 transition-transform">
+                            <Icon size={16} />
+                          </div>
+                          <h4 className={`text-sm font-bold uppercase tracking-wider ${isLightMode ? 'text-zinc-900' : 'text-white'} mb-2`}>{val.title}</h4>
+                          <p className="text-xs text-zinc-400 font-light leading-relaxed">{val.desc}</p>
+                        </InteractiveTiltCard>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Seção 5: Visite Nossos Stands (Alternando 3 showrooms) */}
+              <div className="border-t border-zinc-900/40 pt-16 space-y-16">
+                <div className="text-center max-w-xl mx-auto space-y-4">
+                  <h3 className={`text-3xl font-extrabold uppercase tracking-tight ${isLightMode ? 'text-zinc-950' : 'text-white'}`}>
+                    Visite Nossos Stands
+                  </h3>
+                  <div className="w-12 h-[2px] bg-[#d81d00] mx-auto"></div>
+                  <p className="text-xs text-zinc-400 font-light uppercase tracking-wider">
+                    Conheça nossos showrooms com atendimento exclusivo
+                  </p>
+                </div>
+
+                <div className="space-y-16">
+                  {[
+                    { id: 1, name: 'Showroom Barueri', address: 'R. Gen. de Divisão Pedro Rodrigues da Silva, 651 - Barueri, SP', phone: '(11) 2078-3960', hours: 'Seg a Sáb, 9h às 20h', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
+                    { id: 2, name: 'Showroom Tamboré', address: 'Av. Marcos Penteado de Ulhôa Rodrigues, 1119 - Tamboré, Barueri, SP', phone: '(11) 2078-3960', hours: 'Seg a Sáb, 9h às 20h', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80' },
+                    { id: 3, name: 'Showroom Alphaville', address: 'Alameda Rio Negro, 1030 - Alphaville, Barueri, SP', phone: '(11) 2078-3960', hours: 'Seg a Sáb, 9h às 20h', img: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80' }
+                  ].map((stand, idx) => {
+                    const isEven = idx % 2 === 0;
+                    return (
+                      <div key={stand.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div className={`lg:col-span-7 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+                          <div className="glass-panel-hover rounded-3xl overflow-hidden aspect-[16/9] border border-zinc-900/60 shadow-xl relative group">
+                            <img 
+                              src={stand.img} 
+                              alt={stand.name} 
+                              className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-black/10"></div>
+                          </div>
+                        </div>
+                        <div className={`lg:col-span-5 text-left p-6 space-y-4 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+                          <h4 className={`text-xl font-bold uppercase tracking-wide ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>{stand.name}</h4>
+                          <div className="space-y-2 text-xs text-zinc-400 font-light">
+                            <div className="flex items-start gap-2">
+                              <span className="text-red-500">📍</span>
+                              <span>{stand.address}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-red-500">📞</span>
+                              <span>{stand.phone}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-red-500">🕒</span>
+                              <span>{stand.hours}</span>
+                            </div>
+                          </div>
+                          <a 
+                            href={`https://maps.google.com/?q=${encodeURIComponent(stand.address)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#d81d00] hover:text-[#ff3c20] transition-colors pt-2"
+                          >
+                            Ver no mapa ➔
+                          </a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Seção 6: Video Banner (Authoria) */}
+              <div className="glass-panel relative rounded-3xl overflow-hidden aspect-[21/9] flex items-center justify-center border border-zinc-900/60 shadow-2xl">
+                <div className="absolute inset-0 z-0">
+                  <img 
+                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" 
+                    alt="Authoria por Dubai" 
+                    className="w-full h-full object-cover opacity-60 scale-102"
+                  />
+                  <div className="absolute inset-0 bg-black/50"></div>
+                </div>
+                <div className="relative z-10 text-center space-y-4 px-6">
+                  <span className="text-red-500 text-xs font-bold uppercase tracking-[0.3em] block animate-pulse">LANÇAMENTO</span>
+                  <h3 className="text-2xl md:text-5xl text-white-forced uppercase font-black tracking-widest font-sans">
+                    AUTHORIA POR DUBAI
+                  </h3>
+                  <p className="text-[10px] md:text-xs uppercase tracking-widest" style={{ color: '#d4d4d8' }}>
+                    ALPHAVILLE, SP — 4 A 5 SUÍTES — 273M² A 529M²
+                  </p>
+                  <button className="w-16 h-16 rounded-full bg-white/10 hover:bg-[#d81d00]/20 border border-white/20 hover:border-[#d81d00]/50 flex items-center justify-center text-white hover:text-[#d81d00] transition-all duration-300 mx-auto mt-6 group shadow-lg">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" className="ml-1 group-hover:scale-110 transition-transform"><path d="M8 5v14l11-7z"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Seção 7: Nossa História (Slider Interativo) */}
+              <div className="border-t border-zinc-900/40 pt-16 space-y-8">
+                <div className="text-left">
+                  <h3 className={`text-3xl font-extrabold uppercase tracking-tight ${isLightMode ? 'text-zinc-950' : 'text-white'}`}>
+                    Nossa História
+                  </h3>
+                  <div className="w-16 h-[2px] bg-[#d81d00] mt-4"></div>
+                </div>
+
+                {/* Slides de História */}
+                {(() => {
+                  const historySlides = [
+                    {
+                      year: '2021 - 2022',
+                      title: 'Dubai Foundation & Expansion',
+                      paragraphs: [
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+                        'Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio. Lorem ipsum dolor sit amet, consectetur'
+                      ],
+                      img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80'
+                    },
+                    {
+                      year: '2023 - 2024',
+                      title: 'Padrão Dubai Consolidation',
+                      paragraphs: [
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+                        'Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio. Lorem ipsum dolor sit amet, consectetur'
+                      ],
+                      img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+                    }
+                  ];
+                  const currentSlide = historySlides[historySlide % historySlides.length];
+
+                  return (
+                    <div className="space-y-6">
+                      <div className="glass-panel rounded-3xl overflow-hidden aspect-[21/9] border border-zinc-900/60 relative group shadow-xl">
+                        <img 
+                          src={currentSlide.img} 
+                          alt={currentSlide.title} 
+                          className="w-full h-full object-cover group-hover:scale-101 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 animate-fade-in" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}></div>
+                      </div>
+
+                      {/* Ano Triggers / Timelines */}
+                      <div className="flex gap-8 border-b border-zinc-900/30 pb-4">
+                        {historySlides.map((slide, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setHistorySlide(idx)}
+                            className="relative pb-4 text-sm font-bold uppercase tracking-widest transition-colors flex items-center gap-2"
+                          >
+                            <span className={`w-2 h-2 rounded-full ${idx === historySlide ? 'bg-[#d81d00]' : 'bg-zinc-700'}`}></span>
+                            <span className={idx === historySlide ? (isLightMode ? 'text-zinc-950' : 'text-white') : 'text-zinc-500'}>
+                              {slide.year}
+                            </span>
+                            {idx === historySlide && (
+                              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#d81d00] animate-pulse"></span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Conteúdo do Slide de História */}
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-4">
+                        <div className="lg:col-span-4 text-left">
+                          <h4 className={`text-xl font-bold uppercase tracking-wider ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                            {currentSlide.title}
+                          </h4>
+                        </div>
+                        <div className="lg:col-span-8 text-left space-y-4">
+                          {currentSlide.paragraphs.map((p, idx) => (
+                            <p key={idx} className="text-sm text-zinc-400 font-light leading-relaxed">
+                              {p}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Controls Buttons */}
+                      <div className="flex justify-start gap-3 pt-4">
+                        <button 
+                          onClick={() => setHistorySlide((prev) => (prev === 0 ? historySlides.length - 1 : prev - 1))}
+                          className="w-10 h-10 rounded-full border border-zinc-800 hover:border-red-900/40 hover:bg-[#d81d00]/10 flex items-center justify-center transition-colors text-zinc-400 hover:text-[#d81d00]"
+                        >
+                          ←
+                        </button>
+                        <button 
+                          onClick={() => setHistorySlide((prev) => (prev === historySlides.length - 1 ? 0 : prev + 1))}
+                          className="w-10 h-10 rounded-full border border-zinc-800 hover:border-red-900/40 hover:bg-[#d81d00]/10 flex items-center justify-center transition-colors text-zinc-400 hover:text-[#d81d00]"
+                        >
+                          ➔
+                        </button>
+                      </div>
+
+                    </div>
+                  );
+                })()}
+
+            </div>
+
+          </div>
+        </div>
+        )}
+
+        {/* ------------------------------------------------------------------------- */}
+        {/* PÁGINA 6: INSIGHTS (PORTAL DE TENDÊNCIAS) */}
+        {/* ------------------------------------------------------------------------- */}
+        {currentPage === 'insights' && (() => {
+          // Local Post Data for Featured / Bento Grid (all categorised under "Inspiração" per Axure design)
+          const featuredPosts = INSIGHTS_ARTICLES.filter(post => post.id.startsWith('feat'));
+          const allSeeAlsoPosts = INSIGHTS_ARTICLES.filter(post => post.id.startsWith('see'));
+
+          // Filter "Veja também" based on selected category and search query
+          const filteredSeeAlso = allSeeAlsoPosts.filter(post => {
+            const matchesCategory = selectedCategory ? post.category === selectedCategory : true;
+            const matchesSearch = insightsSearchQuery 
+              ? post.title.toLowerCase().includes(insightsSearchQuery.toLowerCase()) || 
+                post.desc.toLowerCase().includes(insightsSearchQuery.toLowerCase())
+              : true;
+            return matchesCategory && matchesSearch;
+          });
+
+          // Handlers
+          const handleSearchSubmit = (e) => {
+            e.preventDefault();
+            setInsightsSearchQuery(searchInputValue);
+            setInsightsPageNumber(1);
+          };
+
+          const handleClearFilters = () => {
+            setSelectedCategory(null);
+            setInsightsSearchQuery('');
+            setSearchInputValue('');
+            setInsightsPageNumber(1);
+          };
+
+          return (
+            <div className="animate-fade-in-up">
+              
+              {/* Header / Hero Section */}
+              <div className={`insights-hero-section relative border-b py-24 px-6 overflow-hidden ${
+                isLightMode 
+                  ? 'bg-gradient-to-r from-zinc-100 via-zinc-50 to-zinc-100 border-zinc-200' 
+                  : 'bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border-zinc-900/60'
+              }`}>
+                {/* Neon blur spot */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-900 rounded-full blur-[120px]"></div>
+                </div>
+                
+                <div className="max-w-5xl mx-auto text-center relative z-10 pt-8">
+                  <span className={`text-xs font-bold uppercase tracking-[0.25em] flex items-center justify-center gap-2 mb-3 ${isLightMode ? 'text-zinc-650' : 'text-zinc-400'}`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d81d00] animate-pulse"></span>
+                    Dubai Trends & News
+                  </span>
+                  <h1 className={`text-4xl md:text-6xl uppercase font-black leading-[1.1] tracking-wider font-sans mb-4 ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                    INSIGHTS
+                  </h1>
+                  <p className={`text-sm font-light max-w-2xl mx-auto leading-relaxed ${isLightMode ? 'text-zinc-650 font-medium' : 'text-zinc-400'}`}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin Lorem ipsum dolor sit amet.
+                  </p>
+                </div>
+              </div>
+
+              {/* Horizontal Category Bar */}
+              <div className="max-w-6xl mx-auto px-6 mt-12 md:mt-16">
+                <div className={`flex flex-wrap items-center justify-center gap-3 p-2 rounded-2xl border ${
+                  isLightMode ? 'bg-zinc-100/80 border-zinc-200/80' : 'bg-zinc-900/40 border-zinc-800/80'
+                }`}>
+                  {['Institucional', 'Mercado', 'Tecnologia e inovação', 'Sustentabilidade'].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(selectedCategory === cat ? null : cat);
+                        setInsightsPageNumber(1);
+                      }}
+                      className={`px-5 py-3 rounded-xl text-[11px] uppercase tracking-widest font-bold transition-all duration-300 relative flex items-center gap-2 border ${
+                        selectedCategory === cat
+                          ? 'active bg-zinc-950 text-[#d81d00] border-[#d81d00] shadow-[0_0_12px_rgba(216,29,0,0.12)]'
+                          : isLightMode
+                            ? 'bg-white border-zinc-200 text-zinc-600 hover:border-zinc-350 hover:text-zinc-900'
+                            : 'bg-zinc-950/40 border-zinc-850 text-zinc-400 hover:border-zinc-700 hover:text-white'
+                      }`}
+                    >
+                      <span>{cat}</span>
+                      {selectedCategory === cat && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d81d00]"></span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bento Grid (Featured Highlights) - Displayed only when no specific filters are active to match mockup */}
+              {!selectedCategory && !insightsSearchQuery && (
+                <div className="max-w-6xl mx-auto px-6 mt-16">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    {/* Left Tall Bento Card */}
+                    <div className="lg:col-span-7">
+                      <InteractiveTiltCard 
+                        onClick={() => { window.location.hash = `#detalhes-noticia/${featuredPosts[0].id}`; }}
+                        className={`insights-bento-card group relative h-[560px] rounded-3xl overflow-hidden border flex flex-col justify-end p-8 md:p-10 shadow-2xl transition-all duration-500 cursor-pointer ${
+                          isLightMode ? 'border-zinc-200' : 'border-zinc-900/60'
+                        }`}
+                      >
+                        <div className="absolute inset-0 z-0">
+                          <img 
+                            src={featuredPosts[0].img} 
+                            alt={featuredPosts[0].title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-1"></div>
+                        </div>
+
+                        <span className="absolute top-6 left-6 z-10 bg-black/60 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-widest px-3.5 py-1.5 rounded-sm">
+                          {featuredPosts[0].category}
+                        </span>
+
+                        <div className="relative z-10 space-y-3.5 text-left">
+                          <span className="text-zinc-400 bento-text-zinc-400 text-[10px] tracking-widest uppercase font-semibold flex items-center gap-1.5">
+                            <Clock size={11} className="text-[#d81d00]" />
+                            {featuredPosts[0].date} | {featuredPosts[0].time}
+                          </span>
+                          <h2 className="text-2xl md:text-3xl text-white bento-text-white font-extrabold uppercase leading-[1.2] tracking-wide group-hover:text-red-500 transition-colors duration-300">
+                            {featuredPosts[0].title}
+                          </h2>
+                          <p className="text-zinc-300 bento-text-zinc-300 text-xs font-light leading-relaxed line-clamp-2 max-w-xl">
+                            {featuredPosts[0].desc}
+                          </p>
+                        </div>
+                      </InteractiveTiltCard>
+                    </div>
+
+                    {/* Right Stack Bento Cards (Landscape) */}
+                    <div className="lg:col-span-5 flex flex-col gap-6">
+                      {/* Top Right Card */}
+                      <InteractiveTiltCard 
+                        onClick={() => { window.location.hash = `#detalhes-noticia/${featuredPosts[1].id}`; }}
+                        className={`insights-bento-card group relative h-[268px] rounded-3xl overflow-hidden border flex flex-col justify-end p-7 shadow-xl transition-all duration-500 cursor-pointer ${
+                          isLightMode ? 'border-zinc-200' : 'border-zinc-900/60'
+                        }`}
+                      >
+                        <div className="absolute inset-0 z-0">
+                          <img 
+                            src={featuredPosts[1].img} 
+                            alt={featuredPosts[1].title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent z-1"></div>
+                        </div>
+
+                        <span className="absolute top-5 left-5 z-10 bg-black/60 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-widest px-3 py-1.2 rounded-sm">
+                          {featuredPosts[1].category}
+                        </span>
+
+                        <div className="relative z-10 space-y-2 text-left">
+                          <span className="text-zinc-400 bento-text-zinc-400 text-[10px] tracking-widest uppercase font-semibold flex items-center gap-1.5">
+                            <Clock size={11} className="text-[#d81d00]" />
+                            {featuredPosts[1].date} | {featuredPosts[1].time}
+                          </span>
+                          <h3 className="text-lg text-white bento-text-white font-extrabold uppercase leading-[1.3] tracking-wide group-hover:text-red-500 transition-colors duration-300">
+                            {featuredPosts[1].title}
+                          </h3>
+                        </div>
+                      </InteractiveTiltCard>
+
+                      {/* Bottom Right Card */}
+                      <InteractiveTiltCard 
+                        onClick={() => { window.location.hash = `#detalhes-noticia/${featuredPosts[2].id}`; }}
+                        className={`insights-bento-card group relative h-[268px] rounded-3xl overflow-hidden border flex flex-col justify-end p-7 shadow-xl transition-all duration-500 cursor-pointer ${
+                          isLightMode ? 'border-zinc-200' : 'border-zinc-900/60'
+                        }`}
+                      >
+                        <div className="absolute inset-0 z-0">
+                          <img 
+                            src={featuredPosts[2].img} 
+                            alt={featuredPosts[2].title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent z-1"></div>
+                        </div>
+
+                        <span className="absolute top-5 left-5 z-10 bg-black/60 backdrop-blur-md text-white text-[10px] uppercase font-bold tracking-widest px-3 py-1.2 rounded-sm">
+                          {featuredPosts[2].category}
+                        </span>
+
+                        <div className="relative z-10 space-y-2 text-left">
+                          <span className="text-zinc-400 bento-text-zinc-400 text-[10px] tracking-widest uppercase font-semibold flex items-center gap-1.5">
+                            <Clock size={11} className="text-[#d81d00]" />
+                            {featuredPosts[2].date} | {featuredPosts[2].time}
+                          </span>
+                          <h3 className="text-lg text-white bento-text-white font-extrabold uppercase leading-[1.3] tracking-wide group-hover:text-red-500 transition-colors duration-300">
+                            {featuredPosts[2].title}
+                          </h3>
+                        </div>
+                      </InteractiveTiltCard>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* General Grid / Feed Section ("Veja também") */}
+              <div className="max-w-6xl mx-auto px-6 mt-20">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-zinc-850 pb-6 mb-10">
+                  <div className="text-left">
+                    <span className="text-[#d81d00] text-xs font-bold uppercase tracking-[0.25em] flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#d81d00] animate-pulse"></span>
+                      Artigos Gerais
+                    </span>
+                    <h2 className={`text-3xl font-extrabold uppercase tracking-tight mt-1 ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                      Veja também
+                    </h2>
+                  </div>
+
+                  {/* Search Bar */}
+                  <form onSubmit={handleSearchSubmit} className="flex w-full md:w-auto max-w-md items-center">
+                    <div className="relative flex-1">
+                      <input 
+                        type="text" 
+                        placeholder="Faça uma busca" 
+                        value={searchInputValue}
+                        onChange={(e) => setSearchInputValue(e.target.value)}
+                        className={`w-full md:w-64 pl-4 pr-10 py-3 rounded-l-xl text-xs font-light focus:outline-none transition-colors border-y border-l ${
+                          isLightMode 
+                            ? 'bg-white border-zinc-200 text-zinc-800 placeholder-zinc-400 focus:border-[#d81d00]' 
+                            : 'bg-zinc-900/60 border-zinc-800 text-white placeholder-zinc-500 focus:border-[#d81d00]'
+                        }`}
+                      />
+                      {searchInputValue && (
+                        <button
+                          type="button"
+                          onClick={() => { setSearchInputValue(''); setInsightsSearchQuery(''); }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-550 hover:text-white"
+                        >
+                          <X size={12} />
+                        </button>
+                      )}
+                    </div>
+                    <button 
+                      type="submit"
+                      className="bg-[#1f1f1f] hover:bg-[#d81d00] text-white-forced font-bold text-[10px] uppercase tracking-widest px-6 py-[13px] rounded-r-xl transition-all duration-300"
+                    >
+                      BUSCAR
+                    </button>
+                  </form>
+                </div>
+
+                {/* Filter info tags */}
+                {(selectedCategory || insightsSearchQuery) && (
+                  <div className="flex flex-wrap items-center gap-3 mb-8 -mt-4 text-left">
+                    <span className="text-xs text-zinc-500 font-light">Filtrando por:</span>
+                    {selectedCategory && (
+                      <span className="bg-[#d81d00]/10 text-[#d81d00] border border-[#d81d00]/30 text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full flex items-center gap-1.5">
+                        Categoria: {selectedCategory}
+                        <button onClick={() => setSelectedCategory(null)} className="hover:text-white">✕</button>
+                      </span>
+                    )}
+                    {insightsSearchQuery && (
+                      <span className="bg-[#d81d00]/10 text-[#d81d00] border border-[#d81d00]/30 text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full flex items-center gap-1.5">
+                        Busca: "{insightsSearchQuery}"
+                        <button onClick={() => { setInsightsSearchQuery(''); setSearchInputValue(''); }} className="hover:text-white">✕</button>
+                      </span>
+                    )}
+                    <button 
+                      onClick={handleClearFilters}
+                      className="text-xs font-semibold text-zinc-400 hover:text-white underline transition-colors"
+                    >
+                      Limpar todos os filtros
+                    </button>
+                  </div>
+                )}
+
+                {/* Feed Grid */}
+                {filteredSeeAlso.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredSeeAlso.map((post) => (
+                      <InteractiveTiltCard
+                        key={post.id}
+                        onClick={() => { window.location.hash = `#detalhes-noticia/${post.id}`; }}
+                        className={`group rounded-2xl overflow-hidden border flex flex-col h-full hover:border-[#d81d00]/30 transition-all duration-500 cursor-pointer ${
+                          isLightMode ? 'bg-white border-zinc-200/80 shadow-md' : 'bg-zinc-950/40 border-zinc-900 shadow-xl'
+                        }`}
+                      >
+                        {/* Thumbnail image */}
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <img 
+                            src={post.img} 
+                            alt={post.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-550 ease-out"
+                          />
+                          <span className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md text-white text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-sm">
+                            {post.category}
+                          </span>
+                        </div>
+
+                        {/* Card body */}
+                        <div className="p-6 flex-1 flex flex-col justify-between text-left space-y-4">
+                          <div className="space-y-2">
+                            <h3 className={`text-base font-extrabold uppercase leading-[1.3] tracking-wide transition-colors group-hover:text-red-500 duration-300 ${
+                              isLightMode ? 'text-zinc-900' : 'text-white'
+                            }`}>
+                              {post.title}
+                            </h3>
+                            <p className={`text-xs font-light leading-relaxed line-clamp-3 ${
+                              isLightMode ? 'text-zinc-600' : 'text-zinc-400'
+                            }`}>
+                              {post.desc}
+                            </p>
+                          </div>
+
+                          <div className="pt-2 border-t border-zinc-900/10 flex items-center justify-between text-[11px] font-bold text-zinc-500 group-hover:text-[#d81d00] transition-colors">
+                            <span className="uppercase tracking-widest text-[10px] text-[#d81d00] underline decoration-[#d81d00]/35 group-hover:decoration-[#d81d00] transition-all">
+                              {post.link}
+                            </span>
+                            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                          </div>
+                        </div>
+                      </InteractiveTiltCard>
+                    ))}
+                  </div>
+                ) : (
+                  // Empty State
+                  <div className={`p-16 rounded-3xl border text-center max-w-xl mx-auto space-y-5 ${
+                    isLightMode ? 'bg-zinc-100/50 border-zinc-200' : 'bg-zinc-900/20 border-zinc-850'
+                  }`}>
+                    <Search className="mx-auto text-zinc-500" size={40} />
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-bold text-white uppercase tracking-wider">Nenhum resultado</h3>
+                      <p className="text-xs text-zinc-400 font-light">Não encontramos artigos correspondentes ao seu filtro ou termo de pesquisa.</p>
+                    </div>
+                    <button 
+                      onClick={handleClearFilters}
+                      className="bg-[#d81d00] hover:bg-[#d81d00]/95 text-white-forced font-bold text-[10px] uppercase tracking-widest px-5 py-3 rounded-lg transition-all"
+                    >
+                      Limpar Filtros e Buscar Novamente
+                    </button>
+                  </div>
+                )}
+
+                {/* Pagination (Decorative & Fully Interactive) */}
+                {filteredSeeAlso.length > 0 && (
+                  <div className="flex items-center justify-center gap-2 mt-16 select-none">
+                    <button 
+                      onClick={() => setInsightsPageNumber(p => Math.max(1, p - 1))}
+                      className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${
+                        isLightMode 
+                          ? 'border-zinc-200 text-zinc-600 hover:bg-zinc-100' 
+                          : 'border-zinc-900 text-zinc-400 hover:border-zinc-800 hover:text-white'
+                      }`}
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                    {[1, 2, 3, '...', 4].map((item, idx) => (
+                      <button
+                        key={idx}
+                        disabled={item === '...'}
+                        onClick={() => typeof item === 'number' && setInsightsPageNumber(item)}
+                        className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
+                          item === '...' 
+                            ? 'text-zinc-500 cursor-default'
+                            : insightsPageNumber === item
+                              ? 'bg-[#d81d00] text-white-forced shadow-[0_0_10px_rgba(216,29,0,0.2)]'
+                              : isLightMode
+                                ? 'border border-zinc-200 text-zinc-650 hover:bg-zinc-100'
+                                : 'border border-zinc-900 text-zinc-400 hover:border-zinc-800 hover:text-white'
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                    <button 
+                      onClick={() => setInsightsPageNumber(p => Math.min(4, p + 1))}
+                      className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all ${
+                        isLightMode 
+                          ? 'border-zinc-200 text-zinc-600 hover:bg-zinc-100' 
+                          : 'border-zinc-900 text-zinc-400 hover:border-zinc-800 hover:text-white'
+                      }`}
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+
+              </div>
+
+              {/* Rich Article Detail Modal (Creative Add-on) */}
+              {selectedArticle && (
+                <div style={{ zIndex: 100 }} className="fixed inset-0 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+                  <div 
+                    className={`relative w-full max-w-3xl max-h-[85vh] rounded-3xl overflow-y-auto border shadow-2xl animate-fade-in-up flex flex-col ${
+                      isLightMode ? 'bg-white border-zinc-200 text-zinc-900' : 'bg-zinc-950 border-zinc-900 text-white'
+                    }`}
+                  >
+                    
+                    {/* Modal Hero Banner */}
+                    <div className="relative aspect-[21/9] w-full overflow-hidden flex-shrink-0">
+                      <img 
+                        src={selectedArticle.img} 
+                        alt={selectedArticle.title} 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+                      <button
+                        onClick={() => setSelectedArticle(null)}
+                        className="absolute top-5 right-5 w-8 h-8 rounded-full bg-black/60 hover:bg-[#d81d00] text-white flex items-center justify-center transition-all hover:scale-105"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+
+                    {/* Modal Content */}
+                    <div className="p-8 space-y-6 flex-1 text-left">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <span className="bg-[#d81d00] text-white-forced text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-sm">
+                          {selectedArticle.category}
+                        </span>
+                        <span className="text-zinc-500 text-xs flex items-center gap-1.5 font-light">
+                          <Calendar size={13} className="text-[#d81d00]" />
+                          Publicado em {selectedArticle.date}
+                        </span>
+                      </div>
+
+                      <h2 className={`text-2xl md:text-3xl font-black uppercase leading-[1.2] tracking-wide ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                        {selectedArticle.title}
+                      </h2>
+
+                      <div className={`text-sm font-light leading-relaxed space-y-4 ${isLightMode ? 'text-zinc-700' : 'text-zinc-300'}`}>
+                        {selectedArticle.content.split('\n').map((paragraph, index) => (
+                          <p key={index}>{paragraph}</p>
+                        ))}
+                        <p>
+                          A qualidade e o planejamento em cada detalhe são a marca registrada da Dubai Construtora. Nossos residenciais são projetados para oferecer uma experiência de moradia sofisticada, moderna e duradoura, alinhando as maiores tendências internacionais de design ao bem-estar e à segurança das famílias brasileiras.
+                        </p>
+                      </div>
+
+                      <div className="pt-6 border-t border-zinc-900/10 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-zinc-500 font-light">Deseja receber mais informativos?</span>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            setSelectedArticle(null);
+                            setCurrentPage('contato');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="bg-[#d81d00] hover:bg-[#d81d00]/90 text-white-forced font-bold text-xs uppercase tracking-[0.25em] px-6 py-3.5 rounded-xl transition-all shadow-[0_0_15px_rgba(216,29,0,0.15)] flex items-center gap-2"
+                        >
+                          Fale Conosco
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          );
+        })()}
+                
+        {/* ------------------------------------------------------------------------- */}
+        {/* PÁGINA 7: DETALHES DA NOTÍCIA */}
+        {/* ------------------------------------------------------------------------- */}
+        {currentPage === 'detalhes-noticia' && (() => {
+          const article = selectedArticle || INSIGHTS_ARTICLES[0];
+
+          // Get 3 other publications for "Outras publicações" section
+          const relatedArticles = INSIGHTS_ARTICLES
+            .filter(a => a.id !== article.id)
+            .slice(0, 3);
+          return (
+            <div className={`pt-32 pb-20 relative transition-colors duration-500 ${isLightMode ? 'bg-[#fcfcfc] text-[#1f1f1f]' : 'bg-[#090909] text-white'}`}>
+              
+              {/* Background grid pattern */}
+              <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none pattern-grid z-0"></div>
+              
+
+
+              <div className="max-w-5xl mx-auto px-6 relative z-10">
+                
+                {/* Breadcrumbs / Category */}
+                <div className="flex flex-col items-center mb-6">
+                  <span className="text-[#d81d00] text-xs font-bold uppercase tracking-[0.25em] mb-2">
+                    {article.category || 'Dubai Trends & News'}
+                  </span>
+                  <div className="h-0.5 w-10 bg-[#d81d00]/30"></div>
+                </div>
+
+                {/* Article Header (Title and Meta) */}
+                <div className="text-center space-y-5 max-w-4xl mx-auto mb-12">
+                  <h1 className={`text-3xl md:text-4.5xl font-extrabold uppercase leading-[1.15] tracking-wide ${isLightMode ? 'text-[#1f1f1f]' : 'text-white'}`}>
+                    {article.title}
+                  </h1>
+                  <p className="text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold uppercase tracking-widest flex items-center justify-center gap-2">
+                    <Clock size={12} className="text-[#d81d00]" />
+                    {article.date || '16/01/2022'} | {article.time || 'HÁ 4 HORAS'}
+                  </p>
+                </div>
+
+                {/* Cover Banner Image */}
+                <div className="relative aspect-[21/9] w-full rounded-[32px] overflow-hidden border border-zinc-200/20 dark:border-zinc-850 shadow-2xl mb-14 group">
+                  <img 
+                    src={article.img} 
+                    alt={article.title} 
+                    className="w-full h-full object-cover grayscale brightness-95 group-hover:grayscale-0 group-hover:scale-102 transition-all duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none"></div>
+                </div>
+
+                {/* Article Body Content */}
+                <div className="max-w-3xl mx-auto space-y-8 text-left">
+                  
+                  {/* Paragraph 1 */}
+                  <p className={`text-[15px] md:text-[16px] leading-relaxed font-light ${isLightMode ? 'text-zinc-700' : 'text-zinc-300'}`}>
+                    {article.content}
+                  </p>
+
+                  {/* Highquote / Blockquote */}
+                  {article.highlightQuote && (
+                    <div className="py-6 border-y border-[#d81d00]/25 my-8">
+                      <blockquote className={`text-lg md:text-xl font-bold italic text-center max-w-2xl mx-auto leading-relaxed ${isLightMode ? 'text-[#1f1f1f]' : 'text-white'}`}>
+                        “{article.highlightQuote}”
+                      </blockquote>
+                    </div>
+                  )}
+
+                  {/* Interactive Video Block (Mockup matching Axure) */}
+                  <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-zinc-200/25 dark:border-zinc-850 shadow-xl my-10 group bg-zinc-950">
+                    <img 
+                      src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" 
+                      alt="Vídeo do Empreendimento" 
+                      className="w-full h-full object-cover opacity-75 grayscale group-hover:scale-102 transition-transform duration-700 ease-out"
+                    />
+                    
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none"></div>
+
+                    {/* Top left overlay: 156 */}
+                    <div className="absolute top-5 left-6 text-white-forced font-mono text-sm tracking-wider bg-black-forced-40 px-3 py-1 rounded-sm backdrop-blur-md font-bold">
+                      156
+                    </div>
+
+                    {/* Top right overlay: AGENDE SUA VISITA */}
+                    <div className="absolute top-5 right-6 text-white-forced text-[10px] uppercase font-bold tracking-[0.2em] bg-black-forced-40 px-4 py-1.5 rounded-sm backdrop-blur-md border border-white/10">
+                      AGENDE SUA VISITA: 21 3591.1333
+                    </div>
+
+                    {/* Center play button */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <button 
+                        className="w-18 h-18 rounded-full bg-white-forced text-black-forced flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 hover:bg-[#d81d00] hover:text-white-forced group/play"
+                        onClick={() => alert('Vídeo promocional do empreendimento está sendo carregado...')}
+                        aria-label="Play video"
+                      >
+                        <Play size={26} className="ml-1 text-black-forced group-hover/play:text-white-forced transition-transform duration-300 group-hover/play:scale-110" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Subtitle & Paragraph 2 */}
+                  {article.subtitle && (
+                    <div className="space-y-4 pt-4">
+                      <h2 className={`text-xl md:text-2xl font-extrabold uppercase tracking-wide ${isLightMode ? 'text-[#1f1f1f]' : 'text-white'}`}>
+                        {article.subtitle}
+                      </h2>
+                      <p className={`text-[15px] md:text-[16px] leading-relaxed font-light ${isLightMode ? 'text-zinc-700' : 'text-zinc-300'}`}>
+                        {article.content2}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Share Section */}
+                  <div className="pt-8 border-t border-zinc-200/40 dark:border-zinc-850/60 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div className="flex items-center gap-3">
+                      <span className={`text-[11px] uppercase font-bold tracking-widest ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                        Compartilhe:
+                      </span>
+                      <div className="flex items-center gap-2.5">
+                        <a 
+                          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' ' + window.location.href)}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-9 h-9 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-emerald-500 hover:border-transparent transition-all duration-300 hover:scale-105"
+                          title="WhatsApp"
+                        >
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 0 0 1.333 4.982L2 22l5.233-1.371a9.994 9.994 0 0 0 4.779 1.21c5.507 0 9.99-4.478 9.991-9.986 0-2.67-1.037-5.18-2.92-7.062A9.925 9.925 0 0 0 12.012 2zm5.836 14.199c-.32.898-1.579 1.63-2.185 1.722-.513.078-1.182.166-3.412-.761-2.855-1.188-4.693-4.088-4.836-4.278-.143-.19-1.163-1.549-1.163-2.953 0-1.404.736-2.093 1.002-2.378.266-.285.58-.356.774-.356.194 0 .387.002.556.01.176.008.411-.067.644.498.24.582.82 2.001.892 2.144.072.143.12.309.025.5-.096.19-.143.309-.285.474-.143.167-.3.372-.429.5-.143.143-.293.299-.126.585.167.285.742 1.226 1.593 1.984.896.797 1.651 1.045 1.884 1.154.233.109.37.09.508-.07.137-.161.586-.682.742-.914.157-.233.314-.195.53-.114.215.081 1.365.644 1.6.76.236.116.393.173.45.272.057.098.057.57-.123 1.077z"/></svg>
+                        </a>
+                        <a 
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`}
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-9 h-9 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-blue-600 hover:border-transparent transition-all duration-300 hover:scale-105"
+                          title="LinkedIn"
+                        >
+                          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                        <a 
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-9 h-9 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-550 hover:text-white hover:bg-blue-800 hover:border-transparent transition-all duration-300 hover:scale-105"
+                          title="Facebook"
+                        >
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Divider Line */}
+                <hr className="border-zinc-200/40 dark:border-zinc-850/60 my-16" />
+
+                {/* "Outras publicações" Section */}
+                <div className="space-y-10">
+                  <h3 className={`text-2xl font-black uppercase tracking-wider text-center ${isLightMode ? 'text-[#1f1f1f]' : 'text-white'}`}>
+                    Outras publicações
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {relatedArticles.map((rel) => (
+                      <div 
+                        key={rel.id}
+                        onClick={() => {
+                          window.location.hash = `#detalhes-noticia/${rel.id}`;
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className={`group rounded-2xl overflow-hidden border flex flex-col h-full hover:border-[#d81d00]/30 transition-all duration-500 cursor-pointer text-left ${
+                          isLightMode ? 'bg-white border-zinc-200 shadow-sm' : 'bg-zinc-950/30 border-zinc-900 shadow-md'
+                        }`}
+                      >
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <img 
+                            src={rel.img} 
+                            alt={rel.title} 
+                            className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-out"
+                          />
+                          <span className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md text-white text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-sm">
+                            {rel.category}
+                          </span>
+                        </div>
+                        <div className="p-6 flex flex-col flex-1 space-y-3">
+                          <h4 className={`text-sm font-bold uppercase tracking-wide line-clamp-2 transition-colors duration-300 group-hover:text-[#d81d00] ${isLightMode ? 'text-zinc-800' : 'text-white'}`}>
+                            {rel.title}
+                          </h4>
+                          <p className="text-zinc-400 text-xs font-light leading-relaxed line-clamp-2 flex-1">
+                            {rel.desc}
+                          </p>
+                          <span className="text-[#d81d00] text-[10px] uppercase font-bold tracking-widest flex items-center gap-1 group-hover:translate-x-1.5 transition-transform duration-300 pt-2">
+                            Consectetur adipiscing aenean 
+                            <ArrowRight size={10} />
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
+
+        {currentPage === 'politicas-privacidade' && (() => {
+          return (
+            <div className={`pt-32 pb-24 relative transition-colors duration-500 ${isLightMode ? 'bg-[#fcfcfc] text-[#1f1f1f]' : 'bg-[#090909] text-white'}`}>
+              
+              {/* Grid de background para riqueza estética */}
+              <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none pattern-grid z-0"></div>
+
+              <div className="max-w-6xl mx-auto px-6 relative z-10">
+                
+                {/* Botão Voltar */}
+                <button 
+                  onClick={() => {
+                    setCurrentPage('home');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#d81d00] font-bold hover:translate-x-[-4px] transition-transform duration-300 mb-8"
+                >
+                  <ArrowLeft size={14} /> Voltar para o início
+                </button>
+
+                {/* Cabeçalho da Página */}
+                <div className="space-y-4 mb-16 text-center lg:text-left">
+                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#d81d00] uppercase block animate-pulse">
+                    Dubai Construtora & Incorporadora
+                  </span>
+                  <h1 className="text-3xl lg:text-5xl font-extrabold uppercase tracking-tight font-display">
+                    Políticas de Privacidade
+                  </h1>
+                  <p className={`text-sm font-light max-w-2xl leading-relaxed ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    Estes termos descrevem as diretrizes de privacidade, segurança e proteção de dados da Dubai Construtora.
+                  </p>
+                </div>
+
+                <hr className={`border-t mb-12 ${isLightMode ? 'border-zinc-200' : 'border-zinc-800'}`} />
+
+                {/* Grid de Conteúdo Principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                  
+                  {/* Menu Lateral Fixo / TOC (Desktop) */}
+                  <div className="lg:col-span-4 sticky top-28 space-y-6 hidden lg:block">
+                    <h3 className={`text-xs uppercase font-extrabold tracking-[0.2em] ${isLightMode ? 'text-zinc-800' : 'text-zinc-300'}`}>
+                      Seções do Documento
+                    </h3>
+                    <nav className="flex flex-col gap-3 text-left border-l border-zinc-200 dark:border-zinc-800 pl-4">
+                      <a href="#politica" className="text-xs font-semibold text-[#d81d00] hover:text-[#d81d00] transition-colors py-1 block">
+                        Diretrizes de Privacidade
+                      </a>
+                      
+                      <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-2 mt-2">
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Subtítulos</span>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                          <a 
+                            key={num}
+                            href={`#sub-${num}`} 
+                            className={`text-xs font-light hover:text-[#d81d00] transition-colors py-0.5 block ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}
+                          >
+                            {num}. Subtítulo
+                          </a>
+                        ))}
+                      </div>
+                    </nav>
+                  </div>
+
+                  {/* Texto Jurídico */}
+                  <div className={`lg:col-span-8 space-y-12 text-left leading-relaxed ${isLightMode ? 'text-zinc-700' : 'text-zinc-300'}`}>
+                    
+                    {/* Seção: Políticas de Privacidade */}
+                    <section id="politica" className="scroll-mt-28 space-y-6">
+                      <h2 className={`text-2xl font-bold uppercase tracking-wide font-display ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                        Políticas de Privacidade
+                      </h2>
+                      <p className="text-sm font-light leading-relaxed">
+                        A Dubai Construtora e Incorporadora tem o compromisso de garantir a privacidade e segurança de seus clientes e visitantes. A utilização e coleta de informações em nossos canais de comunicação digital são realizadas em total conformidade com a legislação aplicável e princípios de transparência e ética.
+                      </p>
+                    </section>
+
+                    {/* Seção: Subtítulos 1 a 8 */}
+                    <div className="space-y-12 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                      {[
+                        { num: 1, pars: 1 },
+                        { num: 2, pars: 3 },
+                        { num: 3, pars: 1 },
+                        { num: 4, pars: 3 },
+                        { num: 5, pars: 1 },
+                        { num: 6, pars: 3 },
+                        { num: 7, pars: 1 },
+                        { num: 8, pars: 3 }
+                      ].map((item) => (
+                        <section key={item.num} id={`sub-${item.num}`} className="scroll-mt-28 space-y-4">
+                          <h3 className={`text-lg font-bold uppercase tracking-wide ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                            {item.num}. Subtítulo
+                          </h3>
+                          {Array.from({ length: item.pars }).map((_, pIdx) => (
+                            <p key={pIdx} className="text-sm font-light leading-relaxed">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.
+                            </p>
+                          ))}
+                        </section>
+                      ))}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
+
+        {currentPage === 'termos-uso' && (() => {
+          return (
+            <div className={`pt-32 pb-24 relative transition-colors duration-500 ${isLightMode ? 'bg-[#fcfcfc] text-[#1f1f1f]' : 'bg-[#090909] text-white'}`}>
+              
+              {/* Grid de background para riqueza estética */}
+              <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none pattern-grid z-0"></div>
+
+              <div className="max-w-6xl mx-auto px-6 relative z-10">
+                
+                {/* Botão Voltar */}
+                <button 
+                  onClick={() => {
+                    setCurrentPage('home');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#d81d00] font-bold hover:translate-x-[-4px] transition-transform duration-300 mb-8"
+                >
+                  <ArrowLeft size={14} /> Voltar para o início
+                </button>
+
+                {/* Cabeçalho da Página */}
+                <div className="space-y-4 mb-16 text-center lg:text-left">
+                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#d81d00] uppercase block animate-pulse">
+                    Dubai Construtora & Incorporadora
+                  </span>
+                  <h1 className="text-3xl lg:text-5xl font-extrabold uppercase tracking-tight font-display">
+                    Termos e Condições de Uso
+                  </h1>
+                  <p className={`text-sm font-light max-w-2xl leading-relaxed ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    Estes termos descrevem as regras de utilização e compromisso com o uso ético dos canais digitais da Dubai Construtora.
+                  </p>
+                </div>
+
+                <hr className={`border-t mb-12 ${isLightMode ? 'border-zinc-200' : 'border-zinc-800'}`} />
+
+                {/* Grid de Conteúdo Principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                  
+                  {/* Menu Lateral Fixo / TOC (Desktop) */}
+                  <div className="lg:col-span-4 sticky top-28 space-y-6 hidden lg:block">
+                    <h3 className={`text-xs uppercase font-extrabold tracking-[0.2em] ${isLightMode ? 'text-zinc-800' : 'text-zinc-300'}`}>
+                      Seções do Documento
+                    </h3>
+                    <nav className="flex flex-col gap-3 text-left border-l border-zinc-200 dark:border-zinc-800 pl-4">
+                      <a href="#termos" className="text-xs font-semibold text-[#d81d00] hover:text-[#d81d00] transition-colors py-1 block">
+                        Regras de Utilização
+                      </a>
+                      
+                      <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-2 mt-2">
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Subtítulos</span>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                          <a 
+                            key={num}
+                            href={`#sub-${num}`} 
+                            className={`text-xs font-light hover:text-[#d81d00] transition-colors py-0.5 block ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}
+                          >
+                            {num}. Subtítulo
+                          </a>
+                        ))}
+                      </div>
+                    </nav>
+                  </div>
+
+                  {/* Texto Jurídico */}
+                  <div className={`lg:col-span-8 space-y-12 text-left leading-relaxed ${isLightMode ? 'text-zinc-700' : 'text-zinc-300'}`}>
+                    
+                    {/* Seção: Termos e Condições de Uso */}
+                    <section id="termos" className="scroll-mt-28 space-y-6">
+                      <h2 className={`text-2xl font-bold uppercase tracking-wide font-display ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                        Termos e Condições de Uso
+                      </h2>
+                      <p className="text-sm font-light leading-relaxed">
+                        Ao acessar e interagir com este portal de internet e canais institucionais oficiais da Dubai Construtora, você declara estar de acordo com os termos e regras de utilização aqui especificados. Se você não concorda com qualquer parte destes termos, solicitamos que não continue a utilização dos nossos serviços online.
+                      </p>
+                    </section>
+
+                    {/* Seção: Subtítulos 1 a 8 */}
+                    <div className="space-y-12 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                      {[
+                        { num: 1, pars: 1 },
+                        { num: 2, pars: 3 },
+                        { num: 3, pars: 1 },
+                        { num: 4, pars: 3 },
+                        { num: 5, pars: 1 },
+                        { num: 6, pars: 3 },
+                        { num: 7, pars: 1 },
+                        { num: 8, pars: 3 }
+                      ].map((item) => (
+                        <section key={item.num} id={`sub-${item.num}`} className="scroll-mt-28 space-y-4">
+                          <h3 className={`text-lg font-bold uppercase tracking-wide ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                            {item.num}. Subtítulo
+                          </h3>
+                          {Array.from({ length: item.pars }).map((_, pIdx) => (
+                            <p key={pIdx} className="text-sm font-light leading-relaxed">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.
+                            </p>
+                          ))}
+                        </section>
+                      ))}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
+
       </main>
 
       <footer className="bg-black/95 border-t border-zinc-950 pt-20 pb-0 px-6 text-zinc-400 text-xs relative overflow-hidden pattern-bg">
@@ -3619,11 +5015,9 @@ export default function App() {
           {/* Coluna Direita (Menu de Links Planos Exigidos) */}
           <div className="lg:col-span-5 flex flex-col gap-3.5 text-left lg:items-end justify-center pt-4 lg:pt-0">
             <button onClick={() => {
-              setCurrentPage('home');
-              setTimeout(() => {
-                document.getElementById('sobre-nos-secao')?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
-            }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Conheça a Dubai</button>
+              setCurrentPage('quem-somos');
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Quem somos</button>
             
             <button onClick={() => {
               setCurrentPage('empreendimentos');
@@ -3631,11 +5025,8 @@ export default function App() {
             }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Empreendimentos</button>
             
             <button onClick={() => {
-              setCurrentPage('home');
-              setTimeout(() => {
-                const insightsSecao = document.querySelector('section.py-28.px-6.border-t.border-zinc-950');
-                insightsSecao?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+              setCurrentPage('insights');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Insights</button>
             
             <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Portal do cliente</a>
@@ -3646,13 +5037,13 @@ export default function App() {
             }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Contato</button>
             
             <button onClick={() => {
-              setCurrentPage('home');
-              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+              setCurrentPage('politicas-privacidade');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Políticas de Privacidade</button>
             
             <button onClick={() => {
-              setCurrentPage('home');
-              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+              setCurrentPage('termos-uso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Termos e Condições de Uso</button>
           </div>
 
