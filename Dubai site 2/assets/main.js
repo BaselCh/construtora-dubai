@@ -232,11 +232,12 @@ const updateHeaderScroll = () => {
   if (!header) return;
   const isLight = document.documentElement.classList.contains('light-mode');
   const scrollY = window.scrollY;
-  const isDetailPage = window.location.pathname.includes('detalhe.html');
-  const isContactPage = window.location.pathname.includes('contato.html');
   
-  const needsGlass = scrollY > 20 || isDetailPage;
-  const needsLightHeader = isLight && (scrollY > 20 || isDetailPage || isContactPage);
+  const currentPath = window.location.pathname;
+  const isHome = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/') || !currentPath.includes('.html');
+  
+  const needsGlass = scrollY > 20 || !isHome;
+  const needsLightHeader = isLight && (scrollY > 20 || !isHome);
   
   if (needsGlass) {
     header.classList.add('glass-panel', 'border-b', 'border-zinc-955', 'shadow-lg');
@@ -626,6 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isHome = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/') || !currentPath.includes('.html');
       const isEmpreendimentos = currentPath.includes('empreendimentos.html');
       const isQuemSomos = currentPath.includes('quem-somos.html');
+      const isDConcept = currentPath.includes('d-concept.html');
       
       const openedContainer = document.createElement('div');
       openedContainer.id = 'header-menu-opened';
@@ -641,6 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="text-sm font-bold tracking-wide transition-colors ${isEmpreendimentos ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}">Empreendimentos</button>
           <button class="text-sm font-bold tracking-wide transition-colors ${isQuemSomos ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}">Quem somos</button>
           <button class="text-sm font-bold tracking-wide transition-colors text-zinc-400 hover:text-white">Insights</button>
+          <button class="text-sm font-bold tracking-wide transition-colors ${isDConcept ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}">d.concept</button>
         </nav>
       `;
       headerLeft.appendChild(openedContainer);

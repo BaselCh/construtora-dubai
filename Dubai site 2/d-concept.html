@@ -1399,9 +1399,75 @@ section.reveal-visible button {
   stroke: #ffffff !important;
 }
 
+/* Light mode mobile menu styling */
+.light-mode #mobile-menu {
+  background-color: rgba(247, 247, 249, 0.98) !important;
+  border-color: #e2e2e7 !important;
+  backdrop-filter: blur(40px) !important;
+  -webkit-backdrop-filter: blur(40px) !important;
+}
+.light-mode #mobile-menu .border-zinc-900 {
+  border-color: #e2e2e7 !important;
+}
+.light-mode #mobile-menu span.text-zinc-500 {
+  color: #8e8e93 !important;
+  border-color: #e2e2e7 !important;
+}
+.light-mode #mobile-menu nav button:not(.text-red-500) {
+  color: #080809 !important;
+}
+.light-mode #mobile-menu nav button:hover,
+.light-mode #mobile-menu nav button.text-white:hover {
+  color: #d81d00 !important;
+}
+.light-mode #mobile-menu div.text-zinc-500 p {
+  color: #48484a !important;
+}
+.light-mode #mobile-menu div.text-zinc-500 p.text-zinc-600 {
+  color: #8e8e93 !important;
+}
 
+/* Specific hover and active states for desktop header drawer menu in light mode */
+.light-mode header.header-light nav button:hover {
+  color: #d81d00 !important;
+}
+.light-mode header.header-light nav button.text-white {
+  color: #d81d00 !important;
+  border-color: #d81d00 !important;
+}
+.light-mode header.header-light button[aria-label="Fechar Menu"]:hover svg path,
+.light-mode header.header-light button[aria-label="Abrir Menu"]:hover svg path {
+  stroke: #d81d00 !important;
+}
 
+/* Force white text on elements with text-white-forced in light mode regardless of type */
+.light-mode .text-white-forced,
+.light-mode h1.text-white-forced,
+.light-mode h2.text-white-forced,
+.light-mode h3.text-white-forced,
+.light-mode h4.text-white-forced,
+.light-mode p.text-white-forced,
+.light-mode span.text-white-forced,
+.light-mode button.text-white-forced,
+.light-mode a.text-white-forced,
+.light-mode div.text-white-forced {
+  color: #ffffff !important;
+}
 
+/* High-specificity circular badge styling for d.concept */
+.light-mode .dconcept-badge,
+.light-mode div.dconcept-badge {
+  background-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
+/* Custom Ken Burns zoom effect for d.concept gallery cards */
+.gallery-card img {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.gallery-card:hover img {
+  transform: scale(1.1) !important;
+}
 </style>
   <!-- Custom Style -->
   <link rel="stylesheet" href="assets/style.css">
@@ -1742,7 +1808,7 @@ section.reveal-visible button {
 </script>
 <footer class="bg-black/95 border-t border-zinc-950 pt-20 pb-0 px-6 text-zinc-400 text-xs relative overflow-hidden pattern-bg"><div class="footer-glow absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-950/10 rounded-full blur-[160px] pointer-events-none"></div><div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 relative z-10"><div class="lg:col-span-7 flex flex-col items-start gap-5"><img alt="Dubai Incorporação e Construção" class="h-10 w-auto cursor-pointer mb-2" src="assets/logo.svg"><p class="text-[11px] italic text-zinc-500 font-light mt-1">"Quem compara compra Dubai."</p><p class="text-xs text-zinc-400 font-light leading-relaxed max-w-md">Excelência, acabamento superior e 100% das obras entregues no prazo estipulado por contrato.</p><div class="flex gap-3 pt-2"><a href="#" class="social-link-btn w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" title="Instagram"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a><a href="#" class="social-link-btn w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" title="Facebook"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a><a href="#" class="social-link-btn w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" title="LinkedIn"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></div><div class="pt-2"><span class="text-zinc-300 text-xs font-semibold tracking-wider">TEL: 11 2078-3960</span></div></div><div class="lg:col-span-5 flex flex-col gap-3.5 text-left lg:items-end justify-center pt-4 lg:pt-0"><button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Quem somos</button><button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Empreendimentos</button><button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Insights</button>
             <button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">d.concept</button><a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Portal do cliente</a><button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Contato</button><button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Políticas de Privacidade</button><button class="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Termos e Condições de Uso</button></div></div><div class="border-t border-zinc-900/10 py-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-[10px] text-zinc-500 gap-4 relative z-10 bg-transparent"><p class="cursor-pointer hover:text-zinc-300 transition-colors" title="Acessar página de teste 3D">© 2026 Dubai Incorporação e Construção. Todos os direitos reservados. Desenvolvimento de Alto Padrão.</p></div><div class="bg-black/90 py-4 px-6 text-center text-[9px] text-zinc-600 -mx-6 relative z-10">Criação e Desenvolvimento New Humans | Plataforma Add Suite - Tecnologia e Comunicação para Transformação Digital</div></footer><div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end"><button class="w-14 h-14 bg-zinc-950/90 backdrop-blur-md rounded-full border border-zinc-900 flex items-center justify-center text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 hover:shadow-[0_0_25px_rgba(216,29,0,0.25)] transition-all duration-300 group shadow-2xl relative" title="Visão Diurna"><span class="absolute right-16 bg-zinc-950/95 backdrop-blur-md border border-zinc-900 text-white text-[9px] tracking-[0.2em] uppercase font-bold px-3.5 py-2 rounded-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-xl transform translate-x-2 group-hover:translate-x-0 font-sans">Visão Diurna</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun text-[#d81d00] group-hover:scale-110 transition-transform duration-300" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button><button class="w-14 h-14 bg-zinc-950/90 backdrop-blur-md rounded-full border border-zinc-900 flex items-center justify-center text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 hover:shadow-[0_0_25px_rgba(216,29,0,0.25)] transition-all duration-300 group shadow-2xl relative" title="Enviar Mensagem"><span class="absolute right-16 bg-zinc-950/95 backdrop-blur-md border border-zinc-900 text-white text-[9px] tracking-[0.2em] uppercase font-bold px-3.5 py-2 rounded-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-xl transform translate-x-2 group-hover:translate-x-0 font-sans">Enviar Mensagem</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail text-[#d81d00] group-hover:scale-110 transition-transform duration-300" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg></button><a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="w-14 h-14 bg-zinc-950/90 backdrop-blur-md rounded-full border border-zinc-900 flex items-center justify-center text-white hover:text-[#d81d00] hover:border-[#d81d00]/40 hover:shadow-[0_0_25px_rgba(216,29,0,0.25)] transition-all duration-300 group shadow-2xl relative" title="WhatsApp de Plantão"><span class="absolute right-16 bg-zinc-950/95 backdrop-blur-md border border-zinc-900 text-white text-[9px] tracking-[0.2em] uppercase font-bold px-3.5 py-2 rounded-sm opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-xl transform translate-x-2 group-hover:translate-x-0 font-sans">Fale no WhatsApp</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square text-[#d81d00] group-hover:scale-110 transition-transform duration-300" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg></a></div></div></div>
-    <script type="module" src="/src/main.jsx?t=1783158974671"></script>
+
   
 
 

@@ -497,6 +497,7 @@ section.reveal-visible button {
 .light-mode h1:not(header *):not(.hero-section *),
 .light-mode h2:not(header *):not(.hero-section *),
 .light-mode h3:not(header *):not(.hero-section *),
+.light-mode h4:not(header *):not(.hero-section *),
 .light-mode .serif-title:not(header *):not(.hero-section *),
 .light-mode .text-white:not(header *):not(.hero-section *) {
   color: var(--text-primary) !important;
@@ -1321,6 +1322,98 @@ section.reveal-visible button {
 .light-mode .bg-red-900 * {
   color: #ffffff !important;
 }
+
+/* d.concept Page Light Mode adaptations */
+.light-mode main.bg-\[\#090909\],
+.light-mode div.bg-\[\#090909\],
+.light-mode .bg-\[\#090909\] {
+  background-color: var(--bg-deep) !important;
+}
+
+.light-mode .bg-zinc-950\/40,
+.light-mode .bg-zinc-950\/20,
+.light-mode .bg-zinc-900\/20,
+.light-mode .bg-zinc-900\/80 {
+  background-color: var(--bg-card) !important;
+}
+
+.light-mode .border-zinc-850,
+.light-mode .border-zinc-800,
+.light-mode .border-zinc-900 {
+  border-color: var(--border-color) !important;
+}
+
+/* Light mode mobile menu styling */
+.light-mode #mobile-menu {
+  background-color: rgba(247, 247, 249, 0.98) !important;
+  border-color: #e2e2e7 !important;
+  backdrop-filter: blur(40px) !important;
+  -webkit-backdrop-filter: blur(40px) !important;
+}
+.light-mode #mobile-menu .border-zinc-900 {
+  border-color: #e2e2e7 !important;
+}
+.light-mode #mobile-menu span.text-zinc-500 {
+  color: #8e8e93 !important;
+  border-color: #e2e2e7 !important;
+}
+.light-mode #mobile-menu nav button:not(.text-red-500) {
+  color: #080809 !important;
+}
+.light-mode #mobile-menu nav button:hover,
+.light-mode #mobile-menu nav button.text-white:hover {
+  color: #d81d00 !important;
+}
+.light-mode #mobile-menu div.text-zinc-500 p {
+  color: #48484a !important;
+}
+.light-mode #mobile-menu div.text-zinc-500 p.text-zinc-600 {
+  color: #8e8e93 !important;
+}
+
+/* Specific hover and active states for desktop header drawer menu in light mode */
+.light-mode header.header-light nav button:hover {
+  color: #d81d00 !important;
+}
+.light-mode header.header-light nav button.text-white {
+  color: #d81d00 !important;
+  border-color: #d81d00 !important;
+}
+.light-mode header.header-light button[aria-label="Fechar Menu"]:hover svg path,
+.light-mode header.header-light button[aria-label="Abrir Menu"]:hover svg path {
+  stroke: #d81d00 !important;
+}
+
+/* Force white text on elements with text-white-forced in light mode regardless of type */
+.light-mode .text-white-forced,
+.light-mode h1.text-white-forced,
+.light-mode h2.text-white-forced,
+.light-mode h3.text-white-forced,
+.light-mode h4.text-white-forced,
+.light-mode p.text-white-forced,
+.light-mode span.text-white-forced,
+.light-mode button.text-white-forced,
+.light-mode a.text-white-forced,
+.light-mode div.text-white-forced {
+  color: #ffffff !important;
+}
+
+/* High-specificity circular badge styling for d.concept */
+.light-mode .dconcept-badge,
+.light-mode div.dconcept-badge {
+  background-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
+/* Custom Ken Burns zoom effect for d.concept gallery cards */
+.gallery-card img {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.gallery-card:hover img {
+  transform: scale(1.1) !important;
+}
+
+
 
 
 
