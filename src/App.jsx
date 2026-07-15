@@ -570,6 +570,7 @@ export default function App() {
     if (hash === '#insights') return 'insights';
     if (hash === '#politicas-privacidade' || hash === '#politicas_de_privacidade') return 'politicas-privacidade';
     if (hash === '#termos-uso' || hash === '#termos_e_condi_oes_de_uso') return 'termos-uso';
+    if (hash === '#d-concept' || hash === '#dconcept') return 'dconcept';
     if (hash.startsWith('#detalhes-noticia')) return 'detalhes-noticia';
     if (hash.startsWith('#detalhe/')) return 'detalhe';
     return 'home';
@@ -582,6 +583,8 @@ export default function App() {
     return 'authoria';
   });
   const [historySlide, setHistorySlide] = useState(0);
+  const [activeFase, setActiveFase] = useState(1);
+  const [activeAmbienteFilter, setActiveAmbienteFilter] = useState('Todos');
   // States for the new Insights page
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [insightsSearchQuery, setInsightsSearchQuery] = useState('');
@@ -611,7 +614,7 @@ export default function App() {
   const [contactSegment, setContactSegment] = useState('cliente'); // 'cliente' | 'vizinho' | 'fornecedor' | 'corretor' | 'trabalhar' | 'denuncia'
   const [desejaIdentificar, setDesejaIdentificar] = useState(false);
 
-  const isHeaderLight = isLightMode && (scrollY > 20 || currentPage === 'detalhe' || currentPage === 'contato' || currentPage === 'insights' || currentPage === 'detalhes-noticia' || currentPage === 'politicas-privacidade' || currentPage === 'termos-uso');
+  const isHeaderLight = isLightMode && (scrollY > 20 || currentPage === 'detalhe' || currentPage === 'contato' || currentPage === 'insights' || currentPage === 'detalhes-noticia' || currentPage === 'politicas-privacidade' || currentPage === 'termos-uso' || currentPage === 'dconcept');
 
   // Estados para busca inteligente global
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -791,6 +794,8 @@ export default function App() {
         setCurrentPage('politicas-privacidade');
       } else if (hash === '#termos-uso' || hash === '#termos_e_condi_oes_de_uso') {
         setCurrentPage('termos-uso');
+      } else if (hash === '#d-concept' || hash === '#dconcept') {
+        setCurrentPage('dconcept');
       } else if (hash.startsWith('#sub-') || hash === '#politica' || hash === '#termos') {
         // Ignorar redirecionamento de página para não resetar quando usar âncoras internas
         const targetId = hash.replace('#', '');
@@ -859,6 +864,9 @@ export default function App() {
     } else if (currentPage === 'termos-uso') {
       targetHash = window.location.hash === '#termos_e_condi_oes_de_uso' ? 'termos_e_condi_oes_de_uso' : 'termos-uso';
       title = 'Termos e Condições de Uso | Dubai Construtora';
+    } else if (currentPage === 'dconcept') {
+      targetHash = 'd-concept';
+      title = 'd.concept | Dubai Construtora';
     } else if (currentPage === 'detalhes-noticia') {
       targetHash = selectedArticle ? `detalhes-noticia/${selectedArticle.id}` : 'detalhes-noticia';
       title = selectedArticle ? `${selectedArticle.title} | Dubai Construtora` : 'Notícia | Dubai Construtora';
@@ -1097,7 +1105,7 @@ export default function App() {
       {/* ========================================================================= */}
       {/* HEADER GLOBAL - Layout Centralizado & Menu Dinâmico do Wireframe */}
       {/* ========================================================================= */}
-      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isHeaderLight ? 'header-light' : ''} ${scrollY > 20 || currentPage === 'detalhe' || currentPage === 'insights' || currentPage === 'detalhes-noticia' || currentPage === 'politicas-privacidade' || currentPage === 'termos-uso' ? 'glass-panel border-b border-zinc-955 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isHeaderLight ? 'header-light' : ''} ${scrollY > 20 || currentPage === 'detalhe' || currentPage === 'insights' || currentPage === 'detalhes-noticia' || currentPage === 'politicas-privacidade' || currentPage === 'termos-uso' || currentPage === 'dconcept' ? 'glass-panel border-b border-zinc-955 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
           {/* Lado Esquerdo: Menu hambúrguer interativo + Links horizontais no estado Aberto */}
@@ -1170,6 +1178,12 @@ export default function App() {
                   >
                     Insights
                   </button>
+                  <button 
+                    onClick={() => { setCurrentPage('dconcept'); setIsMenuOpen(false); }}
+                    className={`text-sm font-bold tracking-wide transition-colors ${currentPage === 'dconcept' ? 'text-white border-b-2 border-[#D81D00] pb-0.5' : 'text-zinc-400 hover:text-white'}`}
+                  >
+                    d.concept
+                  </button>
                 </nav>
               </div>
             )}
@@ -1240,6 +1254,12 @@ export default function App() {
                 className={`text-2xl font-bold uppercase tracking-wider text-left transition-colors ${(currentPage === 'insights' || currentPage === 'detalhes-noticia') ? 'text-red-500' : 'text-white hover:text-red-500'}`}
               >
                 Insights
+              </button>
+              <button 
+                onClick={() => { setCurrentPage('dconcept'); setIsMenuOpen(false); }}
+                className={`text-2xl font-bold uppercase tracking-wider text-left transition-colors ${currentPage === 'dconcept' ? 'text-red-500' : 'text-white hover:text-red-500'}`}
+              >
+                d.concept
               </button>
             </nav>
           </div>
@@ -4820,6 +4840,335 @@ export default function App() {
                         Políticas de Privacidade
                       </h2>
                       <p className="text-sm font-light leading-relaxed">
+                        A Dubai Construtora e Incorporadora tem o compromisso de garantir a privacidade e segurança de seus clientes e visitantes. A utilização e coleta de informações em nossos canais de comunicação digital são realizadas in total conformidade com a legislação aplicável e princípios de transparência e ética.
+                      </p>
+                    </section>
+
+                    {/* Seção: Subtítulos 1 a 8 */}
+                    <div className="space-y-12 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                      {[
+                        { num: 1, pars: 1 },
+                        { num: 2, pars: 3 },
+                        { num: 3, pars: 1 },
+                        { num: 4, pars: 3 },
+                        { num: 5, pars: 1 },
+                        { num: 6, pars: 3 },
+                        { num: 7, pars: 1 },
+                        { num: 8, pars: 3 }
+                      ].map((item) => (
+                        <section key={item.num} id={`sub-${item.num}`} className="scroll-mt-28 space-y-4">
+                          <h3 className={`text-lg font-bold uppercase tracking-wide ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                            {item.num}. Subtítulo
+                          </h3>
+                          {Array.from({ length: item.pars }).map((_, pIdx) => (
+                            <p key={pIdx} className="text-sm font-light leading-relaxed">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.
+                            </p>
+                          ))}
+                        </section>
+                      ))}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
+
+        {currentPage === 'dconcept' && (() => {
+          return (
+            <div className={`pt-32 pb-24 relative transition-colors duration-500 ${isLightMode ? 'bg-[#fcfcfc] text-[#1f1f1f]' : 'bg-[#090909] text-white'}`}>
+              
+              {/* Grid de background para riqueza estética */}
+              <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none pattern-grid z-0"></div>
+
+              <div className="max-w-6xl mx-auto px-6 relative z-10">
+                
+                {/* Botão Voltar */}
+                <button 
+                  onClick={() => {
+                    setCurrentPage('home');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#d81d00] font-bold hover:translate-x-[-4px] transition-transform duration-300 mb-8"
+                >
+                  <ArrowLeft size={14} /> Voltar para o início
+                </button>
+
+                {/* Cabeçalho da Página */}
+                <div className="space-y-4 mb-16 text-center lg:text-left">
+                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#d81d00] uppercase block animate-pulse">
+                    Dubai Construtora & Incorporadora
+                  </span>
+                  <h1 className="text-3xl lg:text-5xl font-extrabold uppercase tracking-tight font-display">
+                    d.concept
+                  </h1>
+                  <p className={`text-sm font-light max-w-2xl leading-relaxed ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    Personalização Inteligente de Alto Padrão. Sua residência suspensa exatamente do seu jeito, antes mesmo de receber as chaves.
+                  </p>
+                </div>
+
+                {/* Imagem de Destaque / Banner */}
+                <div className="mb-20 rounded-2xl overflow-hidden border border-zinc-800 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                  <img 
+                    src={`${import.meta.env.BASE_URL}dconcept-hero.jpg`} 
+                    alt="d.concept Hero" 
+                    className="w-full h-[400px] object-cover"
+                  />
+                </div>
+
+                {/* Seção 1: Grid de Vantagens */}
+                <div className="mb-24">
+                  <h2 className="text-2xl font-bold uppercase tracking-wider mb-10 text-center lg:text-left">
+                    Diferenciais e Vantagens
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                      {
+                        title: "Assessoria de arquitetura",
+                        desc: "Nossa equipe de arquitetos auxiliará gratuitamente durante todas as etapas do processo."
+                      },
+                      {
+                        title: "Comodidade",
+                        desc: "Todos os itens contratados são gerenciados pela própria Dubai, deixando você livre dos aborrecimentos de uma obra."
+                      },
+                      {
+                        title: "Qualidade total",
+                        desc: "O time de especialistas d.concept garante os melhores produtos e acabamentos de alto padrão."
+                      },
+                      {
+                        title: "Pagamento facilitado",
+                        desc: "Melhores opções de pagamento integradas ao fluxo financeiro da sua obra."
+                      },
+                      {
+                        title: "Agilidade para mudar",
+                        desc: "Todos os itens contratados serão entregues instalados, reduzindo substancialmente o tempo da mudança."
+                      },
+                      {
+                        title: "Garantia",
+                        desc: "As garantias de alto padrão do imóvel são mantidas integralmente sem perda de cobertura."
+                      }
+                    ].map((item, idx) => (
+                      <InteractiveTiltCard 
+                        key={idx} 
+                        className={`glass-panel glass-panel-hover p-6 rounded-xl border transition-all duration-300 ${isLightMode ? 'border-zinc-200 bg-white/70' : 'border-zinc-800 bg-zinc-950/40'}`}
+                      >
+                        <div className="dconcept-badge w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs mb-4">
+                          {idx + 1}
+                        </div>
+                        <h4 className="text-sm font-bold uppercase tracking-wider mb-2">{item.title}</h4>
+                        <p className={`text-xs font-light leading-relaxed ${isLightMode ? 'text-zinc-600' : 'text-zinc-400'}`}>{item.desc}</p>
+                      </InteractiveTiltCard>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Seção 2: Fases Interativas */}
+                <div className="mb-24">
+                  <h2 className="text-2xl font-bold uppercase tracking-wider mb-10 text-center lg:text-left">
+                    Cronograma de Personalização
+                  </h2>
+                  
+                  {/* Seletor de Abas */}
+                  <div className="flex justify-center lg:justify-start gap-4 mb-10">
+                    <button 
+                      id="btn-fase1"
+                      onClick={() => setActiveFase(1)}
+                      className={`px-6 py-3 rounded-lg text-xs uppercase font-bold tracking-widest transition-all duration-300 border ${activeFase === 1 ? 'bg-[#d81d00] border-[#d81d00] text-white-forced' : (isLightMode ? 'border-zinc-300 hover:bg-zinc-100 text-zinc-700' : 'border-zinc-800 hover:bg-zinc-900 text-zinc-400')}`}
+                    >
+                      Fase 1: Início da Obra
+                    </button>
+                    <button 
+                      id="btn-fase2"
+                      onClick={() => setActiveFase(2)}
+                      className={`px-6 py-3 rounded-lg text-xs uppercase font-bold tracking-widest transition-all duration-300 border ${activeFase === 2 ? 'bg-[#d81d00] border-[#d81d00] text-white-forced' : (isLightMode ? 'border-zinc-300 hover:bg-zinc-100 text-zinc-700' : 'border-zinc-800 hover:bg-zinc-900 text-zinc-400')}`}
+                    >
+                      Fase 2: Acabamentos Finais
+                    </button>
+                  </div>
+
+                  {/* Conteúdo da Aba */}
+                  <div className={`glass-panel p-8 rounded-2xl border ${isLightMode ? 'border-zinc-200 bg-white/40' : 'border-zinc-800 bg-zinc-950/20'} grid grid-cols-1 lg:grid-cols-12 gap-8 items-center`}>
+                    <div className="lg:col-span-7 space-y-6">
+                      {activeFase === 1 ? (
+                        <>
+                          <h3 className="text-xl font-bold uppercase tracking-wider text-[#d81d00]">Fase 1: Viva sua exclusividade</h3>
+                          <p className={`text-sm font-light leading-relaxed ${isLightMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
+                            A fase 1 acontece nos primeiros meses da obra. O cliente tem a comodidade de escolher entre as opções de plantas disponíveis e até mesclá-las, além de poder escolher entre uma grande variedade de acabamentos que seguem as últimas tendências, com variedade de tamanhos, texturas e cores.
+                          </p>
+                          <div className="grid grid-cols-2 gap-4 pt-4">
+                            {["Metais", "Cubas", "Bancadas", "Bacias sanitárias"].map((opt, oIdx) => (
+                              <div key={oIdx} className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#d81d00]"></div>
+                                <span className="text-xs uppercase font-semibold tracking-wide">{opt}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <h3 className="text-xl font-bold uppercase tracking-wider text-[#d81d00]">Fase 2: Sua casa ainda mais completa</h3>
+                          <p className={`text-sm font-light leading-relaxed ${isLightMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
+                            A fase 2 acontece alguns meses antes da entrega do empreendimento. São oferecidas opções de móveis planejados, pisos, forro de gesso e iluminação, box, espelhos, revestimentos decorativos e muito mais. Tudo isso coordenado pela nossa equipe. Sem dor de cabeça e gastos não planejados.
+                          </p>
+                          <div className="grid grid-cols-2 gap-4 pt-4">
+                            {["Móveis planejados", "Iluminação", "Pisos de madeira", "Box", "Ar Condicionado", "Fechamento de varanda"].map((opt, oIdx) => (
+                              <div key={oIdx} className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#d81d00]"></div>
+                                <span className="text-xs uppercase font-semibold tracking-wide">{opt}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <div className="lg:col-span-5">
+                      <div className="rounded-xl overflow-hidden border border-zinc-800/40">
+                        <img 
+                          src={`${import.meta.env.BASE_URL}${activeFase === 1 ? 'dconcept-fase1.jpg' : 'dconcept-fase2.jpg'}`} 
+                          alt={activeFase === 1 ? "Fase 1" : "Fase 2"} 
+                          className="w-full h-[250px] object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seção 3: Galeria de Ambientes */}
+                <div>
+                  <h2 className="text-2xl font-bold uppercase tracking-wider mb-4 text-center lg:text-left">
+                    Inspiração de Ambientes
+                  </h2>
+                  <p className={`text-sm font-light leading-relaxed mb-10 text-center lg:text-left ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    Explore fotos reais de projetos executados que exemplificam as possibilidades de personalização do programa d.concept.
+                  </p>
+
+                  {/* Filtro de Ambientes */}
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-10">
+                    {["Todos", "Cozinha", "Dormitório", "Home Office", "Banheiro", "Sala", "Closet"].map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveAmbienteFilter(cat)}
+                        className={`px-4 py-2 rounded-full text-[10px] uppercase font-bold tracking-widest transition-all duration-300 border ${activeAmbienteFilter === cat ? 'bg-[#d81d00] border-[#d81d00] text-white-forced' : (isLightMode ? 'border-zinc-200 text-zinc-600 hover:bg-zinc-100 bg-zinc-50' : 'border-zinc-800 text-zinc-400 hover:bg-zinc-900 bg-zinc-950/40')}`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Grid da Galeria */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                      { cat: "Cozinha", title: "Cozinha d.concept Premium", img: "dconcept-cozinha.jpg" },
+                      { cat: "Dormitório", title: "Suíte Master com Iluminação Integrada", img: "dconcept-quarto.jpg" },
+                      { cat: "Home Office", title: "Escritório Minimalista Planejado", img: "dconcept-office.jpg" },
+                      { cat: "Banheiro", title: "Banheiro Spa em Mármore", img: "dconcept-banheiro.jpg" },
+                      { cat: "Sala", title: "Living Room Contemporâneo", img: "dconcept-sala.jpg" },
+                      { cat: "Closet", title: "Walk-in Closet Sob Medida", img: "dconcept-closet.jpg" }
+                    ]
+                    .filter(item => activeAmbienteFilter === 'Todos' || item.cat === activeAmbienteFilter)
+                    .map((item, idx) => (
+                      <InteractiveTiltCard 
+                        key={idx}
+                        className={`gallery-card glass-panel-hover group relative rounded-xl overflow-hidden border transition-all duration-500 shadow-md cursor-pointer ${isLightMode ? 'border-zinc-200 bg-white' : 'border-zinc-850 bg-zinc-950/20'}`}
+                      >
+                        <div className="overflow-hidden h-[300px]">
+                          <img 
+                            src={`${import.meta.env.BASE_URL}${item.img}`} 
+                            alt={item.title} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-300"></div>
+                        <div className="absolute bottom-0 left-0 w-full p-6 text-left">
+                          <span className="text-[9px] font-bold uppercase tracking-widest text-[#d81d00] bg-[#d81d00]/10 px-2 py-1 rounded-sm">{item.cat}</span>
+                          <h4 className="text-sm font-bold uppercase tracking-wider text-white-forced mt-3">{item.title}</h4>
+                        </div>
+                      </InteractiveTiltCard>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
+
+        {currentPage === 'politicas-privacidade' && (() => {
+          return (
+            <div className={`pt-32 pb-24 relative transition-colors duration-500 ${isLightMode ? 'bg-[#fcfcfc] text-[#1f1f1f]' : 'bg-[#090909] text-white'}`}>
+              
+              {/* Grid de background para riqueza estética */}
+              <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none pattern-grid z-0"></div>
+
+              <div className="max-w-6xl mx-auto px-6 relative z-10">
+                
+                {/* Botão Voltar */}
+                <button 
+                  onClick={() => {
+                    setCurrentPage('home');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#d81d00] font-bold hover:translate-x-[-4px] transition-transform duration-300 mb-8"
+                >
+                  <ArrowLeft size={14} /> Voltar para o início
+                </button>
+
+                {/* Cabeçalho da Página */}
+                <div className="space-y-4 mb-16 text-center lg:text-left">
+                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#d81d00] uppercase block animate-pulse">
+                    Dubai Construtora & Incorporadora
+                  </span>
+                  <h1 className="text-3xl lg:text-5xl font-extrabold uppercase tracking-tight font-display">
+                    Políticas de Privacidade
+                  </h1>
+                  <p className={`text-sm font-light max-w-2xl leading-relaxed ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    Estes termos descrevem as diretrizes de privacidade, segurança e proteção de dados da Dubai Construtora.
+                  </p>
+                </div>
+
+                <hr className={`border-t mb-12 ${isLightMode ? 'border-zinc-200' : 'border-zinc-800'}`} />
+
+                {/* Grid de Conteúdo Principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                  
+                  {/* Menu Lateral Fixo / TOC (Desktop) */}
+                  <div className="lg:col-span-4 sticky top-28 space-y-6 hidden lg:block">
+                    <h3 className={`text-xs uppercase font-extrabold tracking-[0.2em] ${isLightMode ? 'text-zinc-800' : 'text-zinc-300'}`}>
+                      Seções do Documento
+                    </h3>
+                    <nav className="flex flex-col gap-3 text-left border-l border-zinc-200 dark:border-zinc-800 pl-4">
+                      <a href="#politica" className="text-xs font-semibold text-[#d81d00] hover:text-[#d81d00] transition-colors py-1 block">
+                        Diretrizes de Privacidade
+                      </a>
+                      
+                      <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-2 mt-2">
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Subtítulos</span>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                          <a 
+                            key={num}
+                            href={`#sub-${num}`} 
+                            className={`text-xs font-light hover:text-[#d81d00] transition-colors py-0.5 block ${isLightMode ? 'text-zinc-500' : 'text-zinc-400'}`}
+                          >
+                            {num}. Subtítulo
+                          </a>
+                        ))}
+                      </div>
+                    </nav>
+                  </div>
+
+                  {/* Texto Jurídico */}
+                  <div className={`lg:col-span-8 space-y-12 text-left leading-relaxed ${isLightMode ? 'text-zinc-700' : 'text-zinc-300'}`}>
+                    
+                    {/* Seção: Políticas de Privacidade */}
+                    <section id="politica" className="scroll-mt-28 space-y-6">
+                      <h2 className={`text-2xl font-bold uppercase tracking-wide font-display ${isLightMode ? 'text-zinc-900' : 'text-white'}`}>
+                        Políticas de Privacidade
+                      </h2>
+                      <p className="text-sm font-light leading-relaxed">
                         A Dubai Construtora e Incorporadora tem o compromisso de garantir a privacidade e segurança de seus clientes e visitantes. A utilização e coleta de informações em nossos canais de comunicação digital são realizadas em total conformidade com a legislação aplicável e princípios de transparência e ética.
                       </p>
                     </section>
@@ -5028,6 +5377,11 @@ export default function App() {
               setCurrentPage('insights');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Insights</button>
+            
+            <button onClick={() => {
+              setCurrentPage('dconcept');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">d.concept</button>
             
             <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="text-left lg:text-right hover:text-[#d81d00] transition-colors font-medium tracking-wide text-xs">Portal do cliente</a>
             

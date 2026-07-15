@@ -276,6 +276,17 @@ section.reveal-visible button {
   }
 }
 
+/* d.concept circular badges for differentiators */
+.dconcept-badge {
+  background-color: rgba(216, 29, 0, 0.15) !important;
+  color: #d81d00 !important;
+}
+
+.light-mode .dconcept-badge {
+  background-color: #d81d00 !important;
+  color: #ffffff !important;
+}
+
 /* Fim das configurações do site */
 
 /* ========================================================================= */
@@ -1296,6 +1307,21 @@ section.reveal-visible button {
   -webkit-background-clip: text !important;
   background-clip: text !important;
 }
+
+/* Force white text on red backgrounds in light mode */
+.light-mode .bg-\[\#d81d00\],
+.light-mode .bg-red-600,
+.light-mode .bg-red-700,
+.light-mode .bg-red-800,
+.light-mode .bg-red-900,
+.light-mode .bg-\[\#d81d00\] *,
+.light-mode .bg-red-600 *,
+.light-mode .bg-red-700 *,
+.light-mode .bg-red-800 *,
+.light-mode .bg-red-900 * {
+  color: #ffffff !important;
+}
+
 
 
 

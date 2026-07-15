@@ -707,6 +707,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (text === 'contato' || text.includes('falar com especialista') || text.includes('agendar') || text.includes('fale conosco')) {
         window.location.href = 'contato.html';
         return;
+      } else if (text === 'd.concept' || text === 'dconcept') {
+        window.location.href = 'd-concept.html';
+        return;
       }
     }
     
